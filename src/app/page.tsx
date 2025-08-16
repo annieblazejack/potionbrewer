@@ -2,6 +2,16 @@
 
 import { useState } from 'react';
 
+interface PotionRecipe {
+  name: string;
+  ingredients: string[];
+  instructions: string[];
+  effects: string[];
+  sideEffects: string[];
+  warnings: string[];
+  rawResponse?: string;
+}
+
 const INGREDIENTS = [
   'Dragon Scale', 'Phoenix Feather', 'Moonstone Dust', 'Unicorn Hair',
   'Troll Blood', 'Fairy Wings', 'Vampire Fang', 'Mermaid Tears',
@@ -11,6 +21,9 @@ const INGREDIENTS = [
 
 export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+  const [recipe, setRecipe] = useState<PotionRecipe | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const toggleIngredient = (ingredient: string) => {
     setSelectedIngredients(prev => {
@@ -37,6 +50,35 @@ Please provide:
 - Important warnings for the brewer
 
 Make it creative and fantastical!`;
+  };
+
+  const brewPotion = async () => {
+    if (selectedIngredients.length < 2) return;
+
+    setIsLoading(true);
+    setError(null);
+    setRecipe(null);
+
+    try {
+      const response = await fetch('/api/brew', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ingredients: selectedIngredients }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to brew potion');
+      }
+
+      const potionRecipe = await response.json();
+      setRecipe(potionRecipe);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -85,15 +127,82 @@ Make it creative and fantastical!`;
           )}
         </div>
 
-        {selectedIngredients.length > 0 && (
+        {selectedIngredients.length >= 2 && (
+          <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 mb-8">
+            <button
+              onClick={brewPotion}
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 px-8 rounded-lg text-xl transition-all transform hover:scale-105"
+            >
+              {isLoading ? '🧙‍♀️ Brewing...' : '🔮 BREW POTION'}
+            </button>
+          </div>
+        )}
+
+        {error && (
+          <div className="bg-red-900/50 backdrop-blur-md rounded-lg p-6 mb-8">
+            <h3 className="text-xl font-semibold text-red-300 mb-2">
+              ⚠️ Brewing Failed
+            </h3>
+            <p className="text-red-200">{error}</p>
+          </div>
+        )}
+
+        {recipe && (
           <div className="bg-white/10 backdrop-blur-md rounded-lg p-6">
-            <h2 className="text-2xl font-semibold text-white mb-4">
-              Generated Prompt
+            <h2 className="text-3xl font-bold text-center text-yellow-300 mb-6">
+              ✨ {recipe.name} ✨
             </h2>
-            <div className="bg-black/20 rounded-lg p-4">
-              <pre className="text-green-300 whitespace-pre-wrap font-mono text-sm">
-                {generatePrompt()}
-              </pre>
+            
+            <div className="grid gap-6">
+              <div>
+                <h3 className="text-xl font-semibold text-purple-300 mb-3">📋 Ingredients</h3>
+                <ul className="list-disc list-inside text-white space-y-1">
+                  {recipe.ingredients.map((ingredient, i) => (
+                    <li key={i}>{ingredient}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold text-blue-300 mb-3">🧪 Instructions</h3>
+                <ol className="list-decimal list-inside text-white space-y-2">
+                  {recipe.instructions.map((step, i) => (
+                    <li key={i}>{step}</li>
+                  ))}
+                </ol>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold text-green-300 mb-3">✨ Effects</h3>
+                <ul className="list-disc list-inside text-white space-y-1">
+                  {recipe.effects.map((effect, i) => (
+                    <li key={i}>{effect}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {recipe.sideEffects.length > 0 && (
+                <div>
+                  <h3 className="text-xl font-semibold text-orange-300 mb-3">⚡ Side Effects</h3>
+                  <ul className="list-disc list-inside text-white space-y-1">
+                    {recipe.sideEffects.map((effect, i) => (
+                      <li key={i}>{effect}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {recipe.warnings.length > 0 && (
+                <div>
+                  <h3 className="text-xl font-semibold text-red-300 mb-3">⚠️ Warnings</h3>
+                  <ul className="list-disc list-inside text-white space-y-1">
+                    {recipe.warnings.map((warning, i) => (
+                      <li key={i}>{warning}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         )}
