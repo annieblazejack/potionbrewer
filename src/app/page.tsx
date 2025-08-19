@@ -6,6 +6,7 @@ import BrewButton from '@/components/BrewButton';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import PotionRecipe from '@/components/PotionRecipe';
+import { hasIngredientImage } from '@/lib/ingredientImages';
 
 interface PotionRecipeData {
   name: string;
@@ -17,12 +18,25 @@ interface PotionRecipeData {
   rawResponse?: string;
 }
 
-const INGREDIENTS = [
-  'Dragon Scale', 'Phoenix Feather', 'Moonstone Dust', 'Unicorn Hair',
-  'Troll Blood', 'Fairy Wings', 'Vampire Fang', 'Mermaid Tears',
-  'Griffin Claw', 'Basilisk Venom', 'Angel Dust', 'Demon Horn',
-  'Witch Hazel', 'Mandrake Root', 'Eye of Newt', 'Bat Wing'
-];
+// Only ingredients that have corresponding image assets (one per image)
+const AVAILABLE_INGREDIENTS = [
+  'Brick',
+  'Chanterelle',
+  'Coins',
+  'Corn Snake',
+  'Feather',
+  'Fossil',
+  'Ice Cream',
+  'Moon',
+  'Moths', 
+  'Parking',
+  'Pawpaw',
+  'Shoelace',
+  'Sunscreen',
+  'Teeth',
+  'Water',
+  'Wren'
+].filter(ingredient => hasIngredientImage(ingredient));
 
 export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
@@ -83,7 +97,7 @@ export default function Home() {
         </header>
         
         <IngredientSelector
-          ingredients={INGREDIENTS}
+          ingredients={AVAILABLE_INGREDIENTS}
           selectedIngredients={selectedIngredients}
           onToggleIngredient={toggleIngredient}
         />
