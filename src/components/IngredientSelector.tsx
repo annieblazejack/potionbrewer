@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getIngredientImage, hasIngredientImage } from '@/lib/ingredientImages';
+import { getIngredientImage, hasIngredientImage, generateViewportPartitionLayout } from '@/lib/ingredientImages';
 
 interface IngredientSelectorProps {
   ingredients: string[];
@@ -8,31 +8,6 @@ interface IngredientSelectorProps {
   maxIngredients?: number;
 }
 
-// Generate consistent scattered positions based on ingredient names (deterministic)
-function generateScatteredPositions(ingredients: string[]) {
-  const positions: Array<{ x: number; y: number }> = [];
-  
-  ingredients.forEach((ingredient, index) => {
-    // Use ingredient name as seed for consistent positioning
-    let hash = 0;
-    for (let i = 0; i < ingredient.length; i++) {
-      hash = ((hash << 5) - hash + ingredient.charCodeAt(i)) & 0xffffffff;
-    }
-    
-    // Use index to add more variation
-    const seed1 = Math.abs(hash + index * 1234567) / 0xffffffff;
-    const seed2 = Math.abs(hash + index * 7654321) / 0xffffffff;
-    
-    const position = {
-      x: seed1 * 80 + 10, // 10% to 90% of container width
-      y: seed2 * 80 + 10  // 10% to 90% of container height
-    };
-    
-    positions.push(position);
-  });
-  
-  return positions;
-}
 
 export default function IngredientSelector({
   ingredients,
@@ -42,8 +17,8 @@ export default function IngredientSelector({
 }: IngredientSelectorProps) {
   const [hoveredIngredient, setHoveredIngredient] = useState<string | null>(null);
   
-  // Generate consistent positions based on ingredient names (for stability across renders)
-  const positions = generateScatteredPositions(ingredients);
+  // Generate viewport-partitioning layout using actual image aspect ratios
+  const layoutItems = generateViewportPartitionLayout(ingredients, 100, 100);
   
   return (
     <section className="border border-border bg-accent/30 p-8 mb-12">
@@ -51,114 +26,111 @@ export default function IngredientSelector({
         Select Ingredients ({selectedIngredients.length}/{maxIngredients})
       </h2>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 mb-8">
-        {ingredients.map(ingredient => {
+      <div className="relative mb-8 p-4 bg-black rounded-2xl border border-gray-800" style={{ minHeight: '500px' }}>
+        {layoutItems.map(item => {
+          const { ingredient, x, y, width, height } = item;
           const imageSrc = getIngredientImage(ingredient);
           const isSelected = selectedIngredients.includes(ingredient);
           const isDisabled = !isSelected && selectedIngredients.length >= maxIngredients;
           const isHovered = hoveredIngredient === ingredient;
           
           return (
-            <div key={ingredient} className="relative">
+            <div 
+              key={ingredient} 
+              className="absolute transition-all duration-300"
+              style={{
+                left: `${x}%`,
+                top: `${y}%`,
+                width: `${width}%`,
+                height: `${height}%`
+              }}
+            >
               <button
                 onClick={() => onToggleIngredient(ingredient)}
                 disabled={isDisabled}
                 onMouseEnter={() => setHoveredIngredient(ingredient)}
                 onMouseLeave={() => setHoveredIngredient(null)}
-                className={`relative w-full p-4 rounded-xl transition-all duration-300 transform group ${
+                className={`w-full h-full relative rounded-lg transition-all duration-300 transform group overflow-hidden ${
                   isSelected
-                    ? 'bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-300 shadow-lg shadow-yellow-200/50 scale-105'
-                    : 'bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 shadow-md hover:shadow-lg hover:scale-105 hover:border-gray-300'
-                } ${isDisabled ? 'opacity-50 cursor-not-allowed hover:scale-100 hover:shadow-md' : 'cursor-pointer'}`}
+                    ? 'ring-4 ring-yellow-400 ring-opacity-60 scale-105 brightness-110'
+                    : 'hover:scale-105 hover:brightness-105 hover:ring-2 hover:ring-white hover:ring-opacity-40'
+                } ${isDisabled ? 'opacity-50 cursor-not-allowed hover:scale-100 hover:brightness-100' : 'cursor-pointer'}`}
               >
                 {imageSrc ? (
-                  <div className="flex flex-col items-center">
-                    {/* Image Container */}
-                    <div className={`relative mb-3 overflow-hidden transition-all duration-300 ${
-                      isSelected ? 'w-20 h-20' : 'w-18 h-18 group-hover:w-20 group-hover:h-20'
-                    }`}>
-                      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/20 to-transparent rounded-lg"></div>
-                      <img
-                        src={imageSrc}
-                        alt={ingredient}
-                        className="w-full h-full object-cover rounded-lg transition-all duration-300"
-                        style={{
-                          filter: isSelected 
-                            ? 'brightness(1.1) contrast(1.1) saturate(1.2)' 
-                            : isHovered 
-                              ? 'brightness(1.05) contrast(1.05)'
-                              : 'brightness(0.95)'
-                        }}
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          const parent = e.currentTarget.parentElement?.parentElement;
-                          if (parent) {
-                            parent.innerHTML = `<div class="w-18 h-18 bg-gray-200 rounded-lg flex items-center justify-center text-xs font-bold text-gray-600">${ingredient.substring(0, 3)}</div>`;
-                          }
-                        }}
-                      />
-                      {/* Subtle inner shadow for depth */}
-                      <div className="absolute inset-0 shadow-inner rounded-lg pointer-events-none"></div>
-                    </div>
-                    
-                    {/* Ingredient Name */}
-                    <span className={`text-xs font-medium text-center leading-tight transition-all duration-300 ${
-                      isSelected ? 'text-yellow-800' : 'text-gray-700 group-hover:text-gray-900'
-                    }`}>
-                      {ingredient}
-                    </span>
+                  <div className="w-full h-full relative">
+                    <img
+                      src={imageSrc}
+                      alt={ingredient}
+                      className="w-full h-full object-contain transition-all duration-500"
+                      style={{
+                        filter: isSelected 
+                          ? 'brightness(1.2) contrast(1.1) saturate(1.4) drop-shadow(0 0 20px rgba(255,215,0,0.6))' 
+                          : isHovered 
+                            ? 'brightness(1.1) contrast(1.05) saturate(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.3))'
+                            : 'brightness(1.0) contrast(1.0) saturate(1.0)'
+                      }}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const parent = e.currentTarget.parentElement;
+                        if (parent) {
+                          parent.innerHTML = `<div class="w-full h-full bg-gray-800 rounded-lg flex items-center justify-center text-xs font-bold text-gray-400 border border-gray-600">${ingredient.substring(0, 2)}</div>`;
+                        }
+                      }}
+                    />
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center h-24">
-                    <span className="text-sm font-medium text-center text-gray-700">
+                  <div className="flex items-center justify-center h-full bg-gray-800 rounded-lg border border-gray-600">
+                    <span className="text-sm font-medium text-center text-gray-400 px-2">
                       {ingredient}
                     </span>
                   </div>
                 )}
                 
-                {/* Selection Badge */}
+                {/* Selection Badge - golden glow */}
                 {isSelected && (
-                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center shadow-lg transform rotate-12">
-                    <span className="text-xs text-yellow-900 font-bold">✓</span>
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
+                    <span className="text-sm text-yellow-900 font-bold">✓</span>
                   </div>
-                )}
-                
-                {/* Hover glow effect */}
-                {isHovered && !isSelected && (
-                  <div className="absolute inset-0 bg-blue-400/10 rounded-xl pointer-events-none"></div>
                 )}
               </button>
 
-              {/* Detailed Hover Tooltip */}
+              {/* Floating Hover Details - more organic positioning */}
               {isHovered && (
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 z-50 pointer-events-none">
-                  <div className="bg-gray-900/95 backdrop-blur-sm text-white text-sm rounded-lg p-4 shadow-2xl max-w-64 min-w-48">
+                <div 
+                  className="absolute z-50 pointer-events-none"
+                  style={{
+                    left: x < 50 ? '100%' : 'auto',
+                    right: x >= 50 ? '100%' : 'auto',
+                    top: y < 30 ? '100%' : 'auto',
+                    bottom: y >= 30 ? '100%' : 'auto',
+                    marginLeft: x < 50 ? '12px' : 'auto',
+                    marginRight: x >= 50 ? '12px' : 'auto',
+                    marginTop: y < 30 ? '12px' : 'auto',
+                    marginBottom: y >= 30 ? '12px' : 'auto'
+                  }}
+                >
+                  <div className="bg-gray-900/95 backdrop-blur-md text-white text-sm rounded-2xl p-4 shadow-2xl border border-gray-700/50 min-w-44 max-w-52">
                     {/* Ingredient Name */}
-                    <div className="font-semibold text-base mb-2 text-center">{ingredient}</div>
+                    <div className="font-bold text-base mb-2 text-center text-white">{ingredient}</div>
                     
-                    {/* Details */}
-                    <div className="space-y-1.5 text-xs">
-                      <div className="flex items-center gap-2">
-                        <span className="text-blue-300">Type:</span>
-                        <span className="text-gray-300">Natural Material</span>
+                    {/* Dark theme details */}
+                    <div className="space-y-2 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="text-emerald-400 font-medium">Origin:</span>
+                        <span className="text-gray-300">Natural</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-green-300">Rarity:</span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-amber-400 font-medium">Potency:</span>
                         <span className="text-gray-300">
-                          {ingredient.length > 10 ? 'Uncommon' : ingredient.length > 6 ? 'Common' : 'Rare'}
+                          {ingredient.length > 10 ? 'Strong' : ingredient.length > 6 ? 'Moderate' : 'Intense'}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-purple-300">Effect:</span>
-                        <span className="text-gray-300">
-                          {isSelected ? 'Selected for brewing' : 'Click to add to recipe'}
+                      <div className="flex items-center justify-between">
+                        <span className="text-purple-400 font-medium">Status:</span>
+                        <span className={isSelected ? 'text-yellow-400 font-medium' : 'text-gray-300'}>
+                          {isSelected ? '✓ Selected' : 'Available'}
                         </span>
                       </div>
-                    </div>
-                    
-                    {/* Tooltip Arrow */}
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2">
-                      <div className="w-3 h-3 bg-gray-900/95 rotate-45"></div>
                     </div>
                   </div>
                 </div>
