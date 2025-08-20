@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const prompt = `Create a magical potion recipe using these ingredients: ${ingredients.join(
+    const prompt = `Write a saucy, scrappy recipe for a potion. It can be a little scornful of the reader. It should feel very North Carolina, charged with a feeling of Southern woods and suburban grime. The voice is Kate McKinnon meets Flannery O'Connor - they love the South, in all its haunted, complicated mess. It should be rooted in place, and maybe a little nostalgic. This isn’t a storybook potion, but something unsettling and quiet in a believable way. Don’t be afraid to be grotesque, and to suggest something out of frame. Think hard about the purpose of the potion and how it relates to the ingredients. The use for the potion must be very clear. Be sassy and sarcastic but still concise. Don’t lean into negative stereotypes of the South. The ingredients are the following: ${ingredients.join(
       ', '
     )}.
 
