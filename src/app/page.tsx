@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import IngredientSelector from '@/components/IngredientSelector';
 import BrewButton from '@/components/BrewButton';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import PotionRecipe from '@/components/PotionRecipe';
 import { hasIngredientImage } from '@/lib/ingredientImages';
+import { type LayoutStrategyName } from '@/lib/layoutStrategies';
 
 interface PotionRecipeData {
   name: string;
@@ -43,6 +44,26 @@ export default function Home() {
   const [recipe, setRecipe] = useState<PotionRecipeData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [layoutStrategy, setLayoutStrategy] = useState<LayoutStrategyName>('poisson');
+
+  // Dev tools integration - expose layout strategies to browser console
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // @ts-ignore - intentionally adding to window for dev tools
+      window.potionBrewer = {
+        setLayout: (strategy: LayoutStrategyName) => {
+          console.log(`🧪 Layout changed to: ${strategy}`);
+          setLayoutStrategy(strategy);
+        },
+        layouts: ['poisson', 'potpack', 'masonry', 'circlepacking'],
+        currentLayout: layoutStrategy
+      };
+      
+      console.log('🧪 Potion Brewer Dev Tools Available!');
+      console.log('Use: window.potionBrewer.setLayout("poisson|potpack|masonry|circlepacking")');
+      console.log('Available layouts:', ['poisson', 'potpack', 'masonry', 'circlepacking']);
+    }
+  }, [layoutStrategy]);
 
   const toggleIngredient = (ingredient: string) => {
     setSelectedIngredients(prev => {
@@ -100,6 +121,8 @@ export default function Home() {
           ingredients={AVAILABLE_INGREDIENTS}
           selectedIngredients={selectedIngredients}
           onToggleIngredient={toggleIngredient}
+          layoutStrategy={layoutStrategy}
+          onLayoutStrategyChange={setLayoutStrategy}
         />
 
         <BrewButton
