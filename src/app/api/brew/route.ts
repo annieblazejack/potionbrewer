@@ -84,7 +84,7 @@ Make it creative and fantastical!`;
       // If JSON parsing fails, create a structured response
       parsedRecipe = {
         name: 'Mystery Potion',
-        ingredients: ingredients.map((ing) => `1 ${ing}`),
+        ingredients: (ingredients as string[]).map((ing) => `1 ${ing}`),
         instructions: [
           'Add ingredients to cauldron',
           'Stir counterclockwise',
