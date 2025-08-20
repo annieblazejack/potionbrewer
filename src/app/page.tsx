@@ -6,6 +6,7 @@ import BrewButton from '@/components/BrewButton';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import PotionRecipe from '@/components/PotionRecipe';
+import { images } from '@/lib/image-manifest';
 
 interface PotionRecipeData {
   name: string;
@@ -16,25 +17,6 @@ interface PotionRecipeData {
   warnings: string[];
   rawResponse?: string;
 }
-
-const INGREDIENTS = [
-  'Dragon Scale',
-  'Phoenix Feather',
-  'Moonstone Dust',
-  'Unicorn Hair',
-  'Troll Blood',
-  'Fairy Wings',
-  'Vampire Fang',
-  'Mermaid Tears',
-  'Griffin Claw',
-  'Basilisk Venom',
-  'Angel Dust',
-  'Demon Horn',
-  'Witch Hazel',
-  'Mandrake Root',
-  'Eye of Newt',
-  'Bat Wing',
-];
 
 export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
@@ -94,7 +76,7 @@ export default function Home() {
         {!isLoading && !recipe && (
           <>
             <IngredientSelector
-              ingredients={INGREDIENTS}
+              ingredients={images}
               selectedIngredients={selectedIngredients}
               onToggleIngredient={toggleIngredient}
             />
