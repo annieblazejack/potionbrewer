@@ -17,7 +17,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const prompt = `Create a magical potion recipe using these ingredients: ${ingredients.join(', ')}.
+    const prompt = `Create a magical potion recipe using these ingredients: ${ingredients.join(
+      ', '
+    )}.
 
 Please provide a response in the following JSON format:
 {
@@ -44,6 +46,9 @@ Please provide a response in the following JSON format:
   ]
 }
 
+Important!: Do NOT wrap the result in markdown. Just return the JSON itself with no
+extra wrapper text.
+
 Make it creative and fantastical!`;
 
     const completion = await openai.chat.completions.create({
@@ -51,22 +56,25 @@ Make it creative and fantastical!`;
       messages: [
         {
           role: 'system',
-          content: 'You are a master alchemist creating magical potion recipes. Always respond with valid JSON only.'
+          content:
+            'You are a master alchemist creating magical potion recipes. Always respond with valid JSON only.',
         },
         {
           role: 'user',
-          content: prompt
-        }
+          content: prompt,
+        },
       ],
       temperature: 0.8,
-      max_tokens: 1000,
+      max_tokens: 10000,
     });
 
     const recipe = completion.choices[0]?.message?.content;
-    
+
     if (!recipe) {
       throw new Error('No recipe generated');
     }
+
+    console.log({ recipe });
 
     // Try to parse as JSON, fallback to text if needed
     let parsedRecipe;
@@ -75,18 +83,21 @@ Make it creative and fantastical!`;
     } catch {
       // If JSON parsing fails, create a structured response
       parsedRecipe = {
-        name: "Mystery Potion",
-        ingredients: ingredients.map(ing => `1 ${ing}`),
-        instructions: ["Add ingredients to cauldron", "Stir counterclockwise", "Let simmer for 10 minutes"],
-        effects: ["Unknown magical effects"],
-        sideEffects: ["Unpredictable results"],
-        warnings: ["Use at your own risk"],
-        rawResponse: recipe
+        name: 'Mystery Potion',
+        ingredients: ingredients.map((ing) => `1 ${ing}`),
+        instructions: [
+          'Add ingredients to cauldron',
+          'Stir counterclockwise',
+          'Let simmer for 10 minutes',
+        ],
+        effects: ['Unknown magical effects'],
+        sideEffects: ['Unpredictable results'],
+        warnings: ['Use at your own risk'],
+        rawResponse: recipe,
       };
     }
 
     return NextResponse.json(parsedRecipe);
-
   } catch (error) {
     console.error('Error generating potion:', error);
     return NextResponse.json(

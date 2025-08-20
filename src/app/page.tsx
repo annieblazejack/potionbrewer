@@ -18,10 +18,22 @@ interface PotionRecipeData {
 }
 
 const INGREDIENTS = [
-  'Dragon Scale', 'Phoenix Feather', 'Moonstone Dust', 'Unicorn Hair',
-  'Troll Blood', 'Fairy Wings', 'Vampire Fang', 'Mermaid Tears',
-  'Griffin Claw', 'Basilisk Venom', 'Angel Dust', 'Demon Horn',
-  'Witch Hazel', 'Mandrake Root', 'Eye of Newt', 'Bat Wing'
+  'Dragon Scale',
+  'Phoenix Feather',
+  'Moonstone Dust',
+  'Unicorn Hair',
+  'Troll Blood',
+  'Fairy Wings',
+  'Vampire Fang',
+  'Mermaid Tears',
+  'Griffin Claw',
+  'Basilisk Venom',
+  'Angel Dust',
+  'Demon Horn',
+  'Witch Hazel',
+  'Mandrake Root',
+  'Eye of Newt',
+  'Bat Wing',
 ];
 
 export default function Home() {
@@ -31,9 +43,9 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   const toggleIngredient = (ingredient: string) => {
-    setSelectedIngredients(prev => {
+    setSelectedIngredients((prev) => {
       if (prev.includes(ingredient)) {
-        return prev.filter(item => item !== ingredient);
+        return prev.filter((item) => item !== ingredient);
       } else if (prev.length < 6) {
         return [...prev, ingredient];
       }
@@ -77,22 +89,23 @@ export default function Home() {
           <h1 className="font-serif text-5xl font-semibold text-foreground mb-4">
             Potion Brewer
           </h1>
-          <p className="text-foreground/70 text-lg max-w-2xl mx-auto">
-            A minimal approach to digital alchemy
-          </p>
         </header>
-        
-        <IngredientSelector
-          ingredients={INGREDIENTS}
-          selectedIngredients={selectedIngredients}
-          onToggleIngredient={toggleIngredient}
-        />
 
-        <BrewButton
-          onClick={brewPotion}
-          isLoading={isLoading}
-          selectedCount={selectedIngredients.length}
-        />
+        {!isLoading && !recipe && (
+          <>
+            <IngredientSelector
+              ingredients={INGREDIENTS}
+              selectedIngredients={selectedIngredients}
+              onToggleIngredient={toggleIngredient}
+            />
+
+            <BrewButton
+              onClick={brewPotion}
+              isLoading={isLoading}
+              selectedCount={selectedIngredients.length}
+            />
+          </>
+        )}
 
         <LoadingIndicator isVisible={isLoading} />
 
