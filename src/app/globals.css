@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
-  --accent: #f5f5f5;
-  --border: #e5e5e5;
+  --background: #000000;
+  --foreground: #ffffff;
+  --accent: #1a1a1a;
+  --border: #2a2a2a;
 }
 
 @theme inline {
@@ -12,51 +12,66 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-border: var(--border);
-  --font-serif: var(--font-geist-sans), serif;
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #f5f5f5;
-    --accent: #1a1a1a;
-    --border: #2a2a2a;
-  }
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-sans: system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), var(--font-sans), system-ui, sans-serif;
+  font-family: system-ui, sans-serif;
   line-height: 1.6;
 }
 
-/* Ensure Geist fonts are applied to all elements */
-* {
-  font-family: inherit;
+/* Custom Caudex font class for specific use cases */
+.font-caudex {
+  font-family: var(--font-caudex), serif !important;
 }
 
-/* Override any Tailwind font classes to use Geist */
-.font-sans {
-  font-family: var(--font-geist-sans), system-ui, sans-serif !important;
+.font-caudex-italic {
+  font-family: var(--font-caudex), serif !important;
+  font-style: italic !important;
 }
 
-.font-serif {
-  font-family: var(--font-geist-sans), serif !important;
+/* System serif font utility class */
+.font-system-serif {
+  font-family: Georgia, "Times New Roman", serif !important;
 }
 
-.font-mono {
-  font-family: var(--font-geist-mono), monospace !important;
+/* Potion Recipe fade-in animation */
+@keyframes fadeInFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Ensure all text elements inherit the Geist font */
-h1, h2, h3, h4, h5, h6, p, span, div, button, input, textarea, select, label {
-  font-family: inherit;
+.potion-recipe-fade-in {
+  animation: fadeInFromTop 3s ease-out forwards;
 }
 
-/* Force Geist font on specific elements that might be overridden */
-.font-medium, .font-semibold, .font-bold {
-  font-family: var(--font-geist-sans), system-ui, sans-serif !important;
+/* Potion Recipe reveal animation - writing effect */
+@keyframes revealFromTop {
+  0% {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+  100% {
+    max-height: 2000px; /* Large enough to contain the content */
+    opacity: 1;
+    overflow: visible;
+  }
 }
+
+.potion-recipe-reveal {
+  animation: revealFromTop 8s ease-out forwards;
+  overflow: hidden;
+}
+
+

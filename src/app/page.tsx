@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import IngredientSelector from '@/components/IngredientSelector';
-import BrewButton from '@/components/BrewButton';
+import IngredientHUD from '@/components/IngredientHUD';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import PotionRecipe from '@/components/PotionRecipe';
@@ -66,27 +66,23 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <header className="mb-16 text-center">
-          <h1 className="font-serif text-5xl font-semibold text-foreground mb-4">
-            Potion Brewer
-          </h1>
-        </header>
+      {!isLoading && !recipe && (
+        <IngredientHUD
+          ingredients={images}
+          selectedIngredients={selectedIngredients}
+          onToggleIngredient={toggleIngredient}
+          onBrewPotion={brewPotion}
+          isLoading={isLoading}
+        />
+      )}
 
+      <div className="pt-24 px-6 py-12">
         {!isLoading && !recipe && (
-          <>
-            <IngredientSelector
-              ingredients={images}
-              selectedIngredients={selectedIngredients}
-              onToggleIngredient={toggleIngredient}
-            />
-
-            <BrewButton
-              onClick={brewPotion}
-              isLoading={isLoading}
-              selectedCount={selectedIngredients.length}
-            />
-          </>
+          <IngredientSelector
+            ingredients={images}
+            selectedIngredients={selectedIngredients}
+            onToggleIngredient={toggleIngredient}
+          />
         )}
 
         <LoadingIndicator isVisible={isLoading} />

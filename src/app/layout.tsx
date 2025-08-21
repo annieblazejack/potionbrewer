@@ -1,15 +1,12 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Caudex } from 'next/font/google';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const caudex = Caudex({
+  variable: '--font-caudex',
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  weight: ['400', '700'],
 });
 
 export const metadata: Metadata = {
@@ -24,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <body className={caudex.variable}>{children}</body>
     </html>
   );
 }
