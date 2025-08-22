@@ -1,12 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import IngredientSelector from '@/components/IngredientSelector';
+import IngredientCarousel from '@/components/IngredientCarousel';
 import BrewButton from '@/components/BrewButton';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import PotionRecipe from '@/components/PotionRecipe';
-import { hasIngredientImage } from '@/lib/ingredientImages';
 
 interface PotionRecipeData {
   name: string;
@@ -36,7 +35,7 @@ const AVAILABLE_INGREDIENTS = [
   'Teeth',
   'Water',
   'Wren'
-].filter(ingredient => hasIngredientImage(ingredient));
+];
 
 export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
@@ -95,10 +94,12 @@ export default function Home() {
 
         {!isLoading && !recipe && (
           <>
-            <IngredientSelector
+            <IngredientCarousel
               ingredients={AVAILABLE_INGREDIENTS}
               selectedIngredients={selectedIngredients}
               onToggleIngredient={toggleIngredient}
+              maxIngredients={6}
+              pageCount={3}
             />
 
             <BrewButton
