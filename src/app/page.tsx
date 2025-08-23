@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import IngredientSelector from '@/components/IngredientSelector';
+import { useState, useEffect } from 'react';
+import ScatteredIngredientSelector from '@/components/ScatteredIngredientSelector';
 import IngredientHUD from '@/components/IngredientHUD';
 import LoadingIndicator from '@/components/LoadingIndicator';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import PotionRecipe from '@/components/PotionRecipe';
+import OnboardingPopup from '@/components/OnboardingPopup';
 import { images } from '@/lib/image-manifest';
 
 interface PotionRecipeData {
@@ -23,6 +24,19 @@ export default function Home() {
   const [recipe, setRecipe] = useState<PotionRecipeData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
+    if (!hasSeenOnboarding) {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleCloseOnboarding = () => {
+    setShowOnboarding(false);
+    localStorage.setItem('hasSeenOnboarding', 'true');
+  };
 
   const toggleIngredient = (ingredient: string) => {
     setSelectedIngredients((prev) => {
@@ -66,6 +80,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
+      <OnboardingPopup isVisible={showOnboarding} onClose={handleCloseOnboarding} />
+      
       {!isLoading && !recipe && (
         <IngredientHUD
           ingredients={images}
@@ -78,7 +94,7 @@ export default function Home() {
 
       <div className="pt-24 px-6 py-12">
         {!isLoading && !recipe && (
-          <IngredientSelector
+          <ScatteredIngredientSelector
             ingredients={images}
             selectedIngredients={selectedIngredients}
             onToggleIngredient={toggleIngredient}
