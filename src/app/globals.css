@@ -24,20 +24,6 @@ body {
   line-height: 1.6;
 }
 
-/* Custom Caudex font class for specific use cases */
-.font-caudex {
-  font-family: var(--font-caudex), serif !important;
-}
-
-.font-caudex-italic {
-  font-family: var(--font-caudex), serif !important;
-  font-style: italic !important;
-}
-
-/* System serif font utility class */
-.font-system-serif {
-  font-family: Georgia, "Times New Roman", serif !important;
-}
 
 /* Potion Recipe fade-in animation */
 @keyframes fadeInFromTop {

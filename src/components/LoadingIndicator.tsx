@@ -2,24 +2,23 @@ import { useEffect, useState } from 'react';
 
 const LOADING_MESSAGES = [
   'Heating the cauldron...',
+  'Breathing slowly. Just FYI, this is going to take a minute...',
   'Measuring magical ingredients...',
-  'Consulting ancient grimoires...',
-  'Stirring counterclockwise...',
-  'Adding a pinch of stardust...',
-  'Waiting for the moon phase...',
-  'Channeling mystical energies...',
-  'Balancing alchemical properties...',
-  'Infusing with arcane wisdom...',
-  'Nearly ready...',
-  'Adding a pinch of "please don\'t poison yourself" to this mess...',
-  'Your ingredient choices are... interesting. I\'m fixing them.',
-  'Muttering ancient curses about modern witches under my breath...',
-  'Rolling my eyes so hard they might fall out. Still brewing though.',
-  'Adding extra patience to this brew. You\'re going to need it.',
   'Consulting my grimoire because... wow. Just wow.',
   'Chanting "please don\'t explode" repeatedly. For both our sakes.',
+  'Stirring counterclockwise...',
+  'Balancing alchemical properties...',
+  'Infusing with arcane wisdom...',
+  'Adding a pinch of "please don\'t poison yourself" to this mess...',
+  'Your ingredient choices are... interesting. I\'m fixing them.',
+  'Muttering ancient curses under my breath...',
+  'Adding extra patience to this brew. We\'re going to need it.',
+  'Rolling my eyes so hard they might fall out. Still brewing though.',
+  'Channeling mystical energies...',
   'Adding three drops of "I can\'t believe I\'m doing this"...',
   'Sighing dramatically while saving your potion from complete disaster.'
+  'Waiting for the moon phase...',
+  'Here we go again...'
 ];
 
 interface LoadingIndicatorProps {
