@@ -16,9 +16,9 @@ const LOADING_MESSAGES = [
   'Rolling my eyes so hard they might fall out. Still brewing though.',
   'Channeling mystical energies...',
   'Adding three drops of "I can\'t believe I\'m doing this"...',
-  'Sighing dramatically while saving your potion from complete disaster.'
+  'Sighing dramatically while saving your potion from complete disaster.',
   'Waiting for the moon phase...',
-  'Here we go again...'
+  'Here we go again...',
 ];
 
 interface LoadingIndicatorProps {
