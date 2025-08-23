@@ -7,6 +7,7 @@ import LoadingIndicator from '@/components/LoadingIndicator';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import PotionRecipe from '@/components/PotionRecipe';
 import OnboardingPopup from '@/components/OnboardingPopup';
+import InstructionTooltip from '@/components/InstructionTooltip';
 import { images } from '@/lib/image-manifest';
 
 interface PotionRecipeData {
@@ -25,6 +26,19 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect if device is mobile
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
@@ -36,6 +50,11 @@ export default function Home() {
   const handleCloseOnboarding = () => {
     setShowOnboarding(false);
     localStorage.setItem('hasSeenOnboarding', 'true');
+    
+    // Show instructions tooltip after onboarding closes
+    setTimeout(() => {
+      setShowInstructions(true);
+    }, 500);
   };
 
   const toggleIngredient = (ingredient: string) => {
@@ -81,6 +100,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <OnboardingPopup isVisible={showOnboarding} onClose={handleCloseOnboarding} />
+      
+      <InstructionTooltip 
+        isVisible={showInstructions} 
+        onDismiss={() => setShowInstructions(false)}
+        isMobile={isMobile}
+      />
       
       {!isLoading && !recipe && (
         <IngredientHUD

@@ -20,7 +20,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-caudex), serif;
   line-height: 1.6;
 }
 
