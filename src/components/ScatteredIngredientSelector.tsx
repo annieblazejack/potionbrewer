@@ -25,7 +25,7 @@ interface ScatteredIngredientSelectorProps {
 const SIZE_CONFIGS = {
   small: { width: 80, height: 80 },
   medium: { width: 120, height: 120 },
-  large: { width: 160, height: 160 }
+  large: { width: 160, height: 160 },
 } as const;
 
 // Container dimensions - wide enough for 100 ingredients
@@ -34,7 +34,11 @@ const CONTAINER_HEIGHT = 600;
 const PADDING = 20;
 
 // Collision detection function
-function checkCollision(pos1: IngredientPosition, pos2: IngredientPosition, buffer = 10): boolean {
+function checkCollision(
+  pos1: IngredientPosition,
+  pos2: IngredientPosition,
+  buffer = 10
+): boolean {
   return !(
     pos1.x + pos1.width + buffer < pos2.x ||
     pos2.x + pos2.width + buffer < pos1.x ||
@@ -44,13 +48,15 @@ function checkCollision(pos1: IngredientPosition, pos2: IngredientPosition, buff
 }
 
 // Generate random positions with collision detection
-function generateScatteredPositions(ingredients: ImageManifest[]): IngredientWithPosition[] {
+function generateScatteredPositions(
+  ingredients: ImageManifest[]
+): IngredientWithPosition[] {
   const positions: IngredientPosition[] = [];
   const ingredientsWithPositions: IngredientWithPosition[] = [];
-  
+
   // Create a seeded random function that changes on each page load
   const seed = Date.now();
-  let random = (() => {
+  const random = (() => {
     let s = seed;
     return () => {
       s = (s * 9301 + 49297) % 233280;
@@ -60,9 +66,13 @@ function generateScatteredPositions(ingredients: ImageManifest[]): IngredientWit
 
   for (const ingredient of ingredients) {
     // Randomly assign size
-    const sizeOptions: (keyof typeof SIZE_CONFIGS)[] = ['small', 'medium', 'large'];
+    const sizeOptions: (keyof typeof SIZE_CONFIGS)[] = [
+      'small',
+      'medium',
+      'large',
+    ];
     const sizeWeights = [0.5, 0.3, 0.2]; // 50% small, 30% medium, 20% large
-    
+
     let size: keyof typeof SIZE_CONFIGS = 'medium';
     const sizeRand = random();
     if (sizeRand < sizeWeights[0]) size = 'small';
@@ -79,10 +89,18 @@ function generateScatteredPositions(ingredients: ImageManifest[]): IngredientWit
       const x = PADDING + random() * (CONTAINER_WIDTH - width - PADDING * 2);
       const y = PADDING + random() * (CONTAINER_HEIGHT - height - PADDING * 2);
 
-      const candidatePosition: IngredientPosition = { x, y, width, height, size };
+      const candidatePosition: IngredientPosition = {
+        x,
+        y,
+        width,
+        height,
+        size,
+      };
 
       // Check for collisions with existing positions
-      const hasCollision = positions.some(pos => checkCollision(candidatePosition, pos));
+      const hasCollision = positions.some((pos) =>
+        checkCollision(candidatePosition, pos)
+      );
 
       if (!hasCollision) {
         position = candidatePosition;
@@ -102,7 +120,7 @@ function generateScatteredPositions(ingredients: ImageManifest[]): IngredientWit
 
     ingredientsWithPositions.push({
       ...ingredient,
-      position
+      position,
     });
   }
 
@@ -113,11 +131,15 @@ export default function ScatteredIngredientSelector({
   ingredients,
   selectedIngredients,
   onToggleIngredient,
-  maxIngredients = 6
+  maxIngredients = 6,
 }: ScatteredIngredientSelectorProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [previewingIngredient, setPreviewingIngredient] = useState<string | null>(null);
-  const [previewAnchorRect, setPreviewAnchorRect] = useState<DOMRect | null>(null);
+  const [previewingIngredient, setPreviewingIngredient] = useState<
+    string | null
+  >(null);
+  const [previewAnchorRect, setPreviewAnchorRect] = useState<
+    DOMRect | undefined
+  >(undefined);
   const [isMobile, setIsMobile] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -126,7 +148,7 @@ export default function ScatteredIngredientSelector({
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
     };
-    
+
     checkIsMobile();
     window.addEventListener('resize', checkIsMobile);
     return () => window.removeEventListener('resize', checkIsMobile);
@@ -146,10 +168,10 @@ export default function ScatteredIngredientSelector({
       const scrollLeft = scrollContainer.scrollLeft;
       const scrollWidth = scrollContainer.scrollWidth;
       const clientWidth = scrollContainer.clientWidth;
-      
+
       // Since we duplicate content, the actual content width is half of scrollWidth
       const contentWidth = CONTAINER_WIDTH;
-      
+
       // If scrolled past the original content, wrap to beginning
       if (scrollLeft >= contentWidth) {
         scrollContainer.scrollLeft = scrollLeft - contentWidth;
@@ -161,7 +183,7 @@ export default function ScatteredIngredientSelector({
     };
 
     scrollContainer.addEventListener('scroll', handleScroll);
-    
+
     // Set initial scroll position to middle to allow scrolling both directions
     scrollContainer.scrollLeft = CONTAINER_WIDTH / 2;
 
@@ -171,28 +193,31 @@ export default function ScatteredIngredientSelector({
   }, []);
 
   // Handle preview interactions
-  const handleMouseEnter = (ingredient: ImageManifest, event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseEnter = (
+    ingredient: ImageManifest,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     if (isMobile) return; // Only for desktop
-    
+
     if (hoverTimeout) clearTimeout(hoverTimeout);
-    
+
     const timeout = setTimeout(() => {
       const rect = event.currentTarget.getBoundingClientRect();
       setPreviewAnchorRect(rect);
       setPreviewingIngredient(ingredient.name);
     }, 500); // 500ms delay for hover
-    
+
     setHoverTimeout(timeout);
   };
 
   const handleMouseLeave = () => {
     if (isMobile) return;
-    
+
     if (hoverTimeout) {
       clearTimeout(hoverTimeout);
       setHoverTimeout(null);
     }
-    
+
     // Add delay before closing to allow moving to preview
     setTimeout(() => {
       setPreviewingIngredient(null);
@@ -216,7 +241,10 @@ export default function ScatteredIngredientSelector({
     }
   };
 
-  const handleClick = (ingredient: ImageManifest, event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (
+    ingredient: ImageManifest,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     if (isMobile) {
       // On mobile, first click shows preview
       if (previewingIngredient !== ingredient.name) {
@@ -240,7 +268,10 @@ export default function ScatteredIngredientSelector({
     }
   };
 
-  const handleKeyDown = (ingredient: ImageManifest, event: React.KeyboardEvent<HTMLButtonElement>) => {
+  const handleKeyDown = (
+    ingredient: ImageManifest,
+    event: React.KeyboardEvent<HTMLButtonElement>
+  ) => {
     if (event.key === 'Enter') {
       // Enter shows preview
       if (previewingIngredient !== ingredient.name) {
@@ -258,20 +289,36 @@ export default function ScatteredIngredientSelector({
   // Function to generate random colors for the pulsing effect
   const getRandomColor = () => {
     const colors = [
-      '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57',
-      '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#ff9f43',
-      '#10ac84', '#ee5a24', '#2f3542', '#3742fa', '#ff6348'
+      '#ff6b6b',
+      '#4ecdc4',
+      '#45b7d1',
+      '#96ceb4',
+      '#feca57',
+      '#ff9ff3',
+      '#54a0ff',
+      '#5f27cd',
+      '#00d2d3',
+      '#ff9f43',
+      '#10ac84',
+      '#ee5a24',
+      '#2f3542',
+      '#3742fa',
+      '#ff6348',
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
   // Render ingredient at given position
-  const renderIngredient = (ingredient: IngredientWithPosition, offsetX = 0) => {
+  const renderIngredient = (
+    ingredient: IngredientWithPosition,
+    offsetX = 0
+  ) => {
     const isSelected = selectedIngredients.includes(ingredient.name);
-    const isDisabled = !isSelected && selectedIngredients.length >= maxIngredients;
+    const isDisabled =
+      !isSelected && selectedIngredients.length >= maxIngredients;
     const randomColor = isSelected ? getRandomColor() : '';
     const { position } = ingredient;
-    
+
     return (
       <button
         key={`${ingredient.name}-${offsetX}`}
@@ -290,9 +337,11 @@ export default function ScatteredIngredientSelector({
           top: `${position.y}px`,
           width: `${position.width}px`,
           height: `${position.height}px`,
-          ...(isSelected ? { boxShadow: `0 0 20px ${randomColor}` } : {})
+          ...(isSelected ? { boxShadow: `0 0 20px ${randomColor}` } : {}),
         }}
-        aria-label={`${ingredient.name} ingredient ${isSelected ? '(selected)' : ''}`}
+        aria-label={`${ingredient.name} ingredient ${
+          isSelected ? '(selected)' : ''
+        }`}
       >
         <img
           src={`/${ingredient.thumbnails.large}`}
@@ -300,12 +349,12 @@ export default function ScatteredIngredientSelector({
           className={`max-w-full max-h-full object-contain rounded pointer-events-none ${
             isSelected ? 'opacity-90' : 'opacity-70'
           }`}
-          style={{ 
-            maxWidth: `${position.width - 24}px`, 
-            maxHeight: `${position.height - 24}px` 
+          style={{
+            maxWidth: `${position.width - 24}px`,
+            maxHeight: `${position.height - 24}px`,
           }}
         />
-        
+
         {/* Visual indicator for preview state */}
         {previewingIngredient === ingredient.name && (
           <div className="absolute inset-0 border-2 border-blue-400 rounded-lg pointer-events-none" />
@@ -315,35 +364,39 @@ export default function ScatteredIngredientSelector({
   };
 
   // Get the currently previewing ingredient data
-  const previewIngredient = previewingIngredient 
-    ? ingredients.find(ing => ing.name === previewingIngredient)
+  const previewIngredient = previewingIngredient
+    ? ingredients.find((ing) => ing.name === previewingIngredient)
     : null;
 
   return (
     <div className="w-full">
       {/* Horizontal scrolling container */}
-      <div 
+      <div
         ref={scrollContainerRef}
         className="overflow-x-auto overflow-y-hidden"
         style={{ height: `${CONTAINER_HEIGHT}px` }}
       >
         {/* Double-wide container with duplicated content for infinite scroll */}
-        <div 
+        <div
           className="relative"
-          style={{ 
-            width: `${CONTAINER_WIDTH * 2}px`, 
+          style={{
+            width: `${CONTAINER_WIDTH * 2}px`,
             height: `${CONTAINER_HEIGHT}px`,
-            minWidth: `${CONTAINER_WIDTH * 2}px`
+            minWidth: `${CONTAINER_WIDTH * 2}px`,
           }}
         >
           {/* Original content */}
-          {ingredientsWithPositions.map(ingredient => renderIngredient(ingredient, 0))}
-          
+          {ingredientsWithPositions.map((ingredient) =>
+            renderIngredient(ingredient, 0)
+          )}
+
           {/* Duplicated content offset by CONTAINER_WIDTH */}
-          {ingredientsWithPositions.map(ingredient => renderIngredient(ingredient, CONTAINER_WIDTH))}
+          {ingredientsWithPositions.map((ingredient) =>
+            renderIngredient(ingredient, CONTAINER_WIDTH)
+          )}
         </div>
       </div>
-      
+
       {/* Ingredient Preview */}
       {previewIngredient && (
         <IngredientPreview
@@ -352,7 +405,10 @@ export default function ScatteredIngredientSelector({
           onClose={() => setPreviewingIngredient(null)}
           onSelect={() => onToggleIngredient(previewIngredient.name)}
           isSelected={selectedIngredients.includes(previewIngredient.name)}
-          isDisabled={!selectedIngredients.includes(previewIngredient.name) && selectedIngredients.length >= maxIngredients}
+          isDisabled={
+            !selectedIngredients.includes(previewIngredient.name) &&
+            selectedIngredients.length >= maxIngredients
+          }
           anchorRect={previewAnchorRect}
           isMobile={isMobile}
           onMouseEnter={handlePreviewMouseEnter}
@@ -360,7 +416,6 @@ export default function ScatteredIngredientSelector({
           showSelectButton={isMobile} // Only show button on mobile
         />
       )}
-      
     </div>
   );
 }
