@@ -19,7 +19,7 @@ export default function BrewButton({
     <button
       onClick={onClick}
       disabled={isLoading || disabled || selectedCount < minIngredients}
-      className="w-full bg-gray-900 text-gray-200 hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed font-medium py-3 px-6 text-base transition-all duration-300 rounded-lg border border-gray-700/50 hover:border-gray-600/70 shadow-lg hover:shadow-xl backdrop-blur-sm"
+      className="w-full bg-gray-900 text-foreground-200 hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed font-medium py-3 px-6 text-base transition-all duration-300 rounded-lg border border-gray-700/50 hover:border-gray-600/70 shadow-lg hover:shadow-xl backdrop-blur-sm"
     >
       {isLoading ? (
         <span className="flex items-center justify-center gap-3">
