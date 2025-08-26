@@ -23,9 +23,9 @@ interface ScatteredIngredientSelectorProps {
 
 // Size configurations for different ingredient card sizes
 const SIZE_CONFIGS = {
-  small: { width: 80, height: 80 },
-  medium: { width: 120, height: 120 },
-  large: { width: 160, height: 160 },
+  small: { width: 100, height: 100 },
+  medium: { width: 140, height: 140 },
+  large: { width: 180, height: 180 },
 } as const;
 
 // Container dimensions - wide enough for 100 ingredients
