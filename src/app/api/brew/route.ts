@@ -84,13 +84,13 @@ Make it creative and fantastical!`;
       // If JSON parsing fails, create a structured response
       parsedRecipe = {
         name: 'Mystery Potion',
+        effects: ['Unknown magical effects'],
         ingredients: (ingredients as string[]).map((ing) => `1 ${ing}`),
         instructions: [
           'Add ingredients to cauldron',
           'Stir counterclockwise',
           'Let simmer for 10 minutes',
         ],
-        effects: ['Unknown magical effects'],
         sideEffects: ['Unpredictable results'],
         warnings: ['Use at your own risk'],
         rawResponse: recipe,

@@ -2,7 +2,7 @@
 
 :root {
   --background: #000000;
-  --foreground: #ffffff;
+  --foreground: #eee9c7;
   --accent: #1a1a1a;
   --border: #2a2a2a;
 }
@@ -38,7 +38,7 @@ body {
 }
 
 .potion-recipe-fade-in {
-  animation: fadeInFromTop 3s ease-out forwards;
+  animation: fadeInFromTop 4s ease-out forwards;
 }
 
 /* Potion Recipe reveal animation - writing effect */

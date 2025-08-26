@@ -1,8 +1,8 @@
 interface PotionRecipeData {
   name: string;
+  effects: string[];
   ingredients: string[];
   instructions: string[];
-  effects: string[];
   sideEffects: string[];
   warnings: string[];
   rawResponse?: string;
@@ -92,14 +92,14 @@ export default function PotionRecipe({ recipe }: PotionRecipeProps) {
 
         {recipe.warnings.length > 0 && (
           <section>
-            <h3 className="font-serif text-xl font-semibold text-red-700 mb-6">
+            <h3 className="font-serif text-xl font-semibold text-foreground-700 mb-6">
               Warnings
             </h3>
             <ul className="space-y-2">
               {recipe.warnings.map((warning, i) => (
                 <li
                   key={i}
-                  className="font-serif text-red-600 pl-4"
+                  className="font-serif text-foreground-600 pl-4"
                 >
                   {warning}
                 </li>
