@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENROUTER_API_KEY,
-  baseURL: process.env.OPENROUTER_API_BASE,
+  apiKey: process.env.OPENAI_API_KEY,
+  // baseURL: process.env.OPENROUTER_API_BASE,
 });
 
 export async function POST(request: NextRequest) {
@@ -52,7 +52,9 @@ extra wrapper text.
 Make it creative and fantastical!`;
 
     const completion = await openai.chat.completions.create({
-      model: process.env.OPENROUTER_MODEL || 'openai/gpt-3.5-turbo',
+      // model: 'gpt-3.5-turbo',
+      model: 'gpt-4o',
+      // model: 'gpt-5-nano',
       messages: [
         {
           role: 'system',
@@ -65,7 +67,6 @@ Make it creative and fantastical!`;
         },
       ],
       temperature: 0.8,
-      max_tokens: 10000,
     });
 
     const recipe = completion.choices[0]?.message?.content;

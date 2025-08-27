@@ -133,6 +133,7 @@ export default function ScatteredIngredientSelector({
   onToggleIngredient,
   maxIngredients = 6,
 }: ScatteredIngredientSelectorProps) {
+  const [isClient, setIsClient] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [previewingIngredient, setPreviewingIngredient] = useState<
     string | null
@@ -142,6 +143,10 @@ export default function ScatteredIngredientSelector({
   >(undefined);
   const [isMobile, setIsMobile] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Detect if device is mobile
   useEffect(() => {
@@ -202,6 +207,9 @@ export default function ScatteredIngredientSelector({
     if (hoverTimeout) clearTimeout(hoverTimeout);
 
     const timeout = setTimeout(() => {
+      if (!event.currentTarget) {
+        return;
+      }
       const rect = event.currentTarget.getBoundingClientRect();
       setPreviewAnchorRect(rect);
       setPreviewingIngredient(ingredient.name);
@@ -367,6 +375,10 @@ export default function ScatteredIngredientSelector({
   const previewIngredient = previewingIngredient
     ? ingredients.find((ing) => ing.name === previewingIngredient)
     : null;
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <div className="w-full">
