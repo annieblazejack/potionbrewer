@@ -21,58 +21,62 @@ export default function PotionRecipe({ recipe }: PotionRecipeProps) {
   if (!recipe) return null;
 
   return (
-    <article className={`p-8 transition-opacity duration-500 ${
-      isVisible ? 'opacity-100' : 'opacity-0'
-    }`}>
-      <div className="prose prose-lg max-w-none">
-        <ReactMarkdown
-          components={{
-            h1: ({ children }: { children?: ReactNode }) => (
-              <h1 className="font-mono text-4xl font-semibold text-foreground text-center mb-12">
-                {children}
-              </h1>
-            ),
-            h2: ({ children }: { children?: ReactNode }) => (
-              <h2 className="font-mono text-xl font-semibold text-foreground mb-6">
-                {children}
-              </h2>
-            ),
-            ul: ({ children }: { children?: ReactNode }) => (
-              <ul className="space-y-2 pb-6">
-                {children}
-              </ul>
-            ),
-            ol: ({ children }: { children?: ReactNode }) => (
-              <ol className="list-decimal space-y-3  pb-6 pl-8">
-                {children}
-              </ol>
-            ),
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            li: ({ children, ...props }: { children?: ReactNode; node?: any }) => {
-              const isOrdered = props.node?.parent?.type === 'list' && props.node?.parent?.ordered;
-              if (isOrdered) {
-                return (
-                  <li className="font-mono text-foreground/80 pl-6 relative">
+    <div className="w-full flex justify-center">
+      <div className="max-w-4xl w-full">
+        <article className={`p-8 transition-opacity duration-500 ${
+          isVisible ? 'opacity-100' : 'opacity-0'
+        }`}>
+          <div className="prose prose-lg max-w-none">
+            <ReactMarkdown
+              components={{
+                h1: ({ children }: { children?: ReactNode }) => (
+                  <h1 className="font-mono text-4xl font-semibold text-foreground text-center mb-12">
                     {children}
-                  </li>
-                );
-              }
-              return (
-                <li className="font-mono text-foreground/80 pl-4">
-                  {children}
-                </li>
-              );
-            },
-            p: ({ children }: { children?: ReactNode }) => (
-              <p className="font-mono text-foreground/80 mb-4">
-                {children}
-              </p>
-            ),
-          }}
-        >
-          {recipe}
-        </ReactMarkdown>
+                  </h1>
+                ),
+                h2: ({ children }: { children?: ReactNode }) => (
+                  <h2 className="font-mono text-xl font-semibold text-foreground mb-6">
+                    {children}
+                  </h2>
+                ),
+                ul: ({ children }: { children?: ReactNode }) => (
+                  <ul className="space-y-2 pb-6">
+                    {children}
+                  </ul>
+                ),
+                ol: ({ children }: { children?: ReactNode }) => (
+                  <ol className="list-decimal space-y-3  pb-6 pl-8">
+                    {children}
+                  </ol>
+                ),
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                li: ({ children, ...props }: { children?: ReactNode; node?: any }) => {
+                  const isOrdered = props.node?.parent?.type === 'list' && props.node?.parent?.ordered;
+                  if (isOrdered) {
+                    return (
+                      <li className="font-mono text-foreground/80 pl-6 relative">
+                        {children}
+                      </li>
+                    );
+                  }
+                  return (
+                    <li className="font-mono text-foreground/80 pl-4">
+                      {children}
+                    </li>
+                  );
+                },
+                p: ({ children }: { children?: ReactNode }) => (
+                  <p className="font-mono text-foreground/80 mb-4">
+                    {children}
+                  </p>
+                ),
+              }}
+            >
+              {recipe}
+            </ReactMarkdown>
+          </div>
+        </article>
       </div>
-    </article>
+    </div>
   );
 }

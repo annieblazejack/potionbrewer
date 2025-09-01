@@ -6,8 +6,8 @@ import IngredientHUD from '@/components/IngredientHUD';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import PotionRecipe from '@/components/PotionRecipe';
 import OnboardingPopup from '@/components/OnboardingPopup';
-import InstructionTooltip from '@/components/InstructionTooltip';
 import { images } from '@/lib/image-manifest';
+import BrewButton from '@/components/BrewButton';
 
 export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
@@ -16,18 +16,6 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
-  const [isMobile, setIsMobile] = useState(true);
-
-  // // Detect if device is mobile
-  // useEffect(() => {
-  //   const checkIsMobile = () => {
-  //     setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
-  //   };
-    
-  //   checkIsMobile();
-  //   window.addEventListener('resize', checkIsMobile);
-  //   return () => window.removeEventListener('resize', checkIsMobile);
-  // }, []);
 
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
@@ -101,23 +89,33 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <OnboardingPopup isVisible={showOnboarding} onClose={handleCloseOnboarding} />
-      
-      <InstructionTooltip 
-        isVisible={showInstructions} 
-        onDismiss={() => setShowInstructions(false)}
-        isMobile={isMobile}
-      />
+  
       
       { !recipe && (
         <IngredientHUD
           ingredients={images}
           selectedIngredients={selectedIngredients}
           onToggleIngredient={toggleIngredient}
-          onBrewPotion={brewPotion}
         />
       )}
 
-      <div className="pt-24 px-6 py-12">
+      {/* Footer with Brew Button */}
+      {!recipe && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-background/98 via-background/95 to-background/90 backdrop-blur-md border-t border-gray-600/30 shadow-2xl">
+          <div className="mx-auto px-6 py-6">
+            <div className="flex justify-center">
+              <div className="w-full max-w-md">
+                <BrewButton
+                  onClick={brewPotion}
+                  selectedCount={selectedIngredients.length}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="pt-24 py-12 pb-32">
         { !recipe && (
           <ScatteredIngredientSelector
             ingredients={images}
@@ -133,3 +131,4 @@ export default function Home() {
     </div>
   );
 }
+

@@ -10,13 +10,13 @@ export default function OnboardingPopup({
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-100 flex items-center justify-center">
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      <div className="relative bg-gray-900 border border-gray-600/30 rounded-xl p-8 max-w-md mx-4 shadow-2xl">
+      <div className="relative bg-black border border-white-600/30 p-8 max-w-md mx-4 shadow-2xl">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-200 transition-colors"
@@ -39,16 +39,17 @@ export default function OnboardingPopup({
 
         <div className="text-center">
           <h2 className="font-mono text-2xl font-medium text-gray-200 mb-4">
-            Welcome to the Potion Brewer
+            Hey, Spooky!
           </h2>
+
           <p className="text-gray-300 leading-relaxed">
-            Forage for ingredients. Once you&apos;ve chosen a few, use the Brew
-            button to create a unique potion recipe.
+            Welcome to the coven. We need help developing a new potion recipe especially for North Carolina. Forage for ingredients. Once you&apos;ve chosen a few, use the &quot;Brew Potion&quot;
+            button to create a unique recipe.
           </p>
 
           <button
             onClick={onClose}
-            className="mt-6 px-6 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium rounded-lg transition-colors"
+            className="mt-6 px-6 py-2 bg-black-700 border border-white-600/30 hover:bg-gray-600 text-white font-medium transition-colors"
           >
             Start Brewing
           </button>

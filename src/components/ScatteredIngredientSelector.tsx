@@ -131,7 +131,7 @@ export default function ScatteredIngredientSelector({
   ingredients,
   selectedIngredients,
   onToggleIngredient,
-  maxIngredients = 6,
+  maxIngredients = 12,
 }: ScatteredIngredientSelectorProps) {
   const [isClient, setIsClient] = useState(false);
   const [windowHeight, setWindowHeight] = useState(0);
@@ -149,7 +149,8 @@ export default function ScatteredIngredientSelector({
   const isMobile = true;
 
   // Calculate dynamic container height - account for parent padding (pt-24 + py-12 = 144px)
-  const containerHeight = Math.max(600, windowHeight - hudHeight - 144);
+  // Add additional padding for top and bottom spacing, plus footer height
+  const containerHeight = Math.min(800, windowHeight - hudHeight - 120 - 100); // 120px for additional padding, 100px for footer
 
   useEffect(() => {
     setIsClient(true);
