@@ -47,6 +47,7 @@ export default function PotionRecipe({ recipe }: PotionRecipeProps) {
                 {children}
               </ol>
             ),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             li: ({ children, ...props }: { children?: ReactNode; node?: any }) => {
               const isOrdered = props.node?.parent?.type === 'list' && props.node?.parent?.ordered;
               if (isOrdered) {
