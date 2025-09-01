@@ -1,112 +1,62 @@
-interface PotionRecipeData {
-  name: string;
-  effects: string[];
-  ingredients: string[];
-  instructions: string[];
-  sideEffects: string[];
-  warnings: string[];
-  rawResponse?: string;
-}
+import ReactMarkdown from 'react-markdown';
+import { ReactNode } from 'react';
 
 interface PotionRecipeProps {
-  recipe: PotionRecipeData | null;
+  recipe: string;
 }
 
 export default function PotionRecipe({ recipe }: PotionRecipeProps) {
   if (!recipe) return null;
 
   return (
-    <article className="p-8 potion-recipe-reveal">
-      <header className="mb-12 text-center">
-        <h2 className="font-serif text-4xl font-semibold text-foreground font-caudex-italic">
-          {recipe.name}
-        </h2>
-      </header>
-
-      <div className="grid gap-12">
-        <section>
-          <h3 className="font-serif text-xl font-semibold text-foreground mb-6">
-            Ingredients
-          </h3>
-          <ul className="space-y-2">
-            {recipe.ingredients.map((ingredient, i) => (
-              <li
-                key={i}
-                className="font-serif text-foreground/80 pl-4"
-              >
-                {ingredient}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section>
-          <h3 className="font-serif text-xl font-semibold text-foreground mb-6">
-            Instructions
-          </h3>
-          <ol className="space-y-3">
-            {recipe.instructions.map((step, i) => (
-              <li key={i} className="font-serif text-foreground/80 pl-6 relative">
-                <span className="absolute left-0 font-medium text-foreground">
-                  {i + 1}.
-                </span>
-                {step}
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section>
-          <h3 className="font-serif text-xl font-semibold text-foreground mb-6">
-            Effects
-          </h3>
-          <ul className="space-y-2">
-            {recipe.effects.map((effect, i) => (
-              <li
-                key={i}
-                className="font-serif text-foreground/80 pl-4"
-              >
-                {effect}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {recipe.sideEffects.length > 0 && (
-          <section>
-            <h3 className="font-serif text-xl font-semibold text-foreground mb-6">
-              Side Effects
-            </h3>
-            <ul className="space-y-2">
-              {recipe.sideEffects.map((effect, i) => (
-                <li
-                  key={i}
-                  className="font-serif text-foreground/80 pl-4"
-                >
-                  {effect}
-              </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {recipe.warnings.length > 0 && (
-          <section>
-            <h3 className="font-serif text-xl font-semibold text-foreground-700 mb-6">
-              Warnings
-            </h3>
-            <ul className="space-y-2">
-              {recipe.warnings.map((warning, i) => (
-                <li
-                  key={i}
-                  className="font-serif text-foreground-600 pl-4"
-                >
-                  {warning}
+    <article className="p-8">
+      <div className="prose prose-lg max-w-none">
+        <ReactMarkdown
+          components={{
+            h1: ({ children }: { children?: ReactNode }) => (
+              <h1 className="font-serif text-4xl font-semibold text-foreground font-caudex-italic text-center mb-12">
+                {children}
+              </h1>
+            ),
+            h2: ({ children }: { children?: ReactNode }) => (
+              <h2 className="font-serif text-xl font-semibold text-foreground mb-6">
+                {children}
+              </h2>
+            ),
+            ul: ({ children }: { children?: ReactNode }) => (
+              <ul className="space-y-2 pb-6">
+                {children}
+              </ul>
+            ),
+            ol: ({ children }: { children?: ReactNode }) => (
+              <ol className="list-decimal space-y-3  pb-6 pl-8">
+                {children}
+              </ol>
+            ),
+            li: ({ children, ...props }: { children?: ReactNode; node?: any }) => {
+              const isOrdered = props.node?.parent?.type === 'list' && props.node?.parent?.ordered;
+              if (isOrdered) {
+                return (
+                  <li className="font-serif text-foreground/80 pl-6 relative">
+                    {children}
+                  </li>
+                );
+              }
+              return (
+                <li className="font-serif text-foreground/80 pl-4">
+                  {children}
                 </li>
-              ))}
-            </ul>
-          </section>
-        )}
+              );
+            },
+            p: ({ children }: { children?: ReactNode }) => (
+              <p className="font-serif text-foreground/80 mb-4">
+                {children}
+              </p>
+            ),
+          }}
+        >
+          {recipe}
+        </ReactMarkdown>
       </div>
     </article>
   );

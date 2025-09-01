@@ -6,7 +6,6 @@ interface IngredientHUDProps {
   selectedIngredients: string[];
   onToggleIngredient: (ingredient: string) => void;
   onBrewPotion: () => void;
-  isLoading: boolean;
   maxIngredients?: number;
 }
 
@@ -15,7 +14,6 @@ export default function IngredientHUD({
   selectedIngredients,
   onToggleIngredient,
   onBrewPotion,
-  isLoading,
   maxIngredients = 6
 }: IngredientHUDProps) {
   return (
@@ -55,7 +53,6 @@ export default function IngredientHUD({
             <div className="flex-shrink-0">
               <BrewButton
                 onClick={onBrewPotion}
-                isLoading={isLoading}
                 selectedCount={selectedIngredients.length}
               />
             </div>

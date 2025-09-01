@@ -1,13 +1,13 @@
-import { ImageManifest } from '@/lib/image-manifest';
-import { useMemo, useRef, useEffect, useState } from 'react';
-import IngredientPreview from './IngredientPreview';
+import { ImageManifest } from "@/lib/image-manifest";
+import { useMemo, useRef, useEffect, useState } from "react";
+import IngredientPreview from "./IngredientPreview";
 
 interface IngredientPosition {
   x: number;
   y: number;
   width: number;
   height: number;
-  size: 'small' | 'medium' | 'large';
+  size: "small" | "medium" | "large";
 }
 
 interface IngredientWithPosition extends ImageManifest {
@@ -67,17 +67,17 @@ function generateScatteredPositions(
   for (const ingredient of ingredients) {
     // Randomly assign size
     const sizeOptions: (keyof typeof SIZE_CONFIGS)[] = [
-      'small',
-      'medium',
-      'large',
+      "small",
+      "medium",
+      "large",
     ];
     const sizeWeights = [0.5, 0.3, 0.2]; // 50% small, 30% medium, 20% large
 
-    let size: keyof typeof SIZE_CONFIGS = 'medium';
+    let size: keyof typeof SIZE_CONFIGS = "medium";
     const sizeRand = random();
-    if (sizeRand < sizeWeights[0]) size = 'small';
-    else if (sizeRand < sizeWeights[0] + sizeWeights[1]) size = 'medium';
-    else size = 'large';
+    if (sizeRand < sizeWeights[0]) size = "small";
+    else if (sizeRand < sizeWeights[0] + sizeWeights[1]) size = "medium";
+    else size = "large";
 
     const { width, height } = SIZE_CONFIGS[size];
 
@@ -141,22 +141,13 @@ export default function ScatteredIngredientSelector({
   const [previewAnchorRect, setPreviewAnchorRect] = useState<
     DOMRect | undefined
   >(undefined);
-  const [isMobile, setIsMobile] = useState(false);
+
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  const isMobile = true;
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
-
-  // Detect if device is mobile
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
-    };
-
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
   // Generate positions once and memoize them
@@ -171,8 +162,6 @@ export default function ScatteredIngredientSelector({
 
     const handleScroll = () => {
       const scrollLeft = scrollContainer.scrollLeft;
-      const scrollWidth = scrollContainer.scrollWidth;
-      const clientWidth = scrollContainer.clientWidth;
 
       // Since we duplicate content, the actual content width is half of scrollWidth
       const contentWidth = CONTAINER_WIDTH;
@@ -187,13 +176,13 @@ export default function ScatteredIngredientSelector({
       }
     };
 
-    scrollContainer.addEventListener('scroll', handleScroll);
+    scrollContainer.addEventListener("scroll", handleScroll);
 
     // Set initial scroll position to middle to allow scrolling both directions
     scrollContainer.scrollLeft = CONTAINER_WIDTH / 2;
 
     return () => {
-      scrollContainer.removeEventListener('scroll', handleScroll);
+      scrollContainer.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -232,23 +221,6 @@ export default function ScatteredIngredientSelector({
     }, 150);
   };
 
-  const handlePreviewMouseEnter = () => {
-    // Cancel any pending close when entering preview
-    if (hoverTimeout) {
-      clearTimeout(hoverTimeout);
-      setHoverTimeout(null);
-    }
-  };
-
-  const handlePreviewMouseLeave = () => {
-    // Close preview when leaving it
-    if (!isMobile) {
-      setTimeout(() => {
-        setPreviewingIngredient(null);
-      }, 100);
-    }
-  };
-
   const handleClick = (
     ingredient: ImageManifest,
     event: React.MouseEvent<HTMLButtonElement>
@@ -280,14 +252,14 @@ export default function ScatteredIngredientSelector({
     ingredient: ImageManifest,
     event: React.KeyboardEvent<HTMLButtonElement>
   ) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       // Enter shows preview
       if (previewingIngredient !== ingredient.name) {
         const rect = event.currentTarget.getBoundingClientRect();
         setPreviewAnchorRect(rect);
         setPreviewingIngredient(ingredient.name);
       }
-    } else if (event.key === ' ') {
+    } else if (event.key === " ") {
       // Space selects ingredient
       event.preventDefault();
       onToggleIngredient(ingredient.name);
@@ -297,21 +269,21 @@ export default function ScatteredIngredientSelector({
   // Function to generate random colors for the pulsing effect
   const getRandomColor = () => {
     const colors = [
-      '#ff6b6b',
-      '#4ecdc4',
-      '#45b7d1',
-      '#96ceb4',
-      '#feca57',
-      '#ff9ff3',
-      '#54a0ff',
-      '#5f27cd',
-      '#00d2d3',
-      '#ff9f43',
-      '#10ac84',
-      '#ee5a24',
-      '#2f3542',
-      '#3742fa',
-      '#ff6348',
+      "#ff6b6b",
+      "#4ecdc4",
+      "#45b7d1",
+      "#96ceb4",
+      "#feca57",
+      "#ff9ff3",
+      "#54a0ff",
+      "#5f27cd",
+      "#00d2d3",
+      "#ff9f43",
+      "#10ac84",
+      "#ee5a24",
+      "#2f3542",
+      "#3742fa",
+      "#ff6348",
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   };
@@ -324,7 +296,7 @@ export default function ScatteredIngredientSelector({
     const isSelected = selectedIngredients.includes(ingredient.name);
     const isDisabled =
       !isSelected && selectedIngredients.length >= maxIngredients;
-    const randomColor = isSelected ? getRandomColor() : '';
+    const randomColor = isSelected ? getRandomColor() : "";
     const { position } = ingredient;
 
     return (
@@ -336,9 +308,9 @@ export default function ScatteredIngredientSelector({
         onKeyDown={(e) => handleKeyDown(ingredient, e)}
         disabled={false} // We handle disabled state in the preview now
         className={`absolute p-3 transition-all font-medium flex flex-col items-center gap-2 justify-center bg-background text-foreground hover:bg-foreground/10 rounded-lg border border-gray-600/20 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-          isDisabled ? 'opacity-50' : ''
+          isDisabled ? "opacity-50" : ""
         } ${
-          previewingIngredient === ingredient.name ? 'ring-2 ring-blue-400' : ''
+          previewingIngredient === ingredient.name ? "ring-2 ring-blue-400" : ""
         }`}
         style={{
           left: `${position.x + offsetX}px`,
@@ -348,14 +320,14 @@ export default function ScatteredIngredientSelector({
           ...(isSelected ? { boxShadow: `0 0 20px ${randomColor}` } : {}),
         }}
         aria-label={`${ingredient.name} ingredient ${
-          isSelected ? '(selected)' : ''
+          isSelected ? "(selected)" : ""
         }`}
       >
         <img
           src={`/${ingredient.thumbnails.large}`}
           alt=""
           className={`max-w-full max-h-full object-contain rounded pointer-events-none ${
-            isSelected ? 'opacity-90' : 'opacity-70'
+            isSelected ? "opacity-90" : "opacity-70"
           }`}
           style={{
             maxWidth: `${position.width - 24}px`,
@@ -382,6 +354,22 @@ export default function ScatteredIngredientSelector({
 
   return (
     <div className="w-full">
+      {/* Ingredient Preview */}
+      {previewIngredient && (
+        <IngredientPreview
+          ingredient={previewIngredient}
+          isVisible={!!previewingIngredient}
+          onClose={() => setPreviewingIngredient(null)}
+          onSelect={() => onToggleIngredient(previewIngredient.name)}
+          isSelected={selectedIngredients.includes(previewIngredient.name)}
+          isDisabled={
+            !selectedIngredients.includes(previewIngredient.name) &&
+            selectedIngredients.length >= maxIngredients
+          }
+          showSelectButton={isMobile} // Only show button on mobile
+        />
+      )}
+
       {/* Horizontal scrolling container */}
       <div
         ref={scrollContainerRef}
@@ -408,26 +396,6 @@ export default function ScatteredIngredientSelector({
           )}
         </div>
       </div>
-
-      {/* Ingredient Preview */}
-      {previewIngredient && (
-        <IngredientPreview
-          ingredient={previewIngredient}
-          isVisible={!!previewingIngredient}
-          onClose={() => setPreviewingIngredient(null)}
-          onSelect={() => onToggleIngredient(previewIngredient.name)}
-          isSelected={selectedIngredients.includes(previewIngredient.name)}
-          isDisabled={
-            !selectedIngredients.includes(previewIngredient.name) &&
-            selectedIngredients.length >= maxIngredients
-          }
-          anchorRect={previewAnchorRect}
-          isMobile={isMobile}
-          onMouseEnter={handlePreviewMouseEnter}
-          onMouseLeave={handlePreviewMouseLeave}
-          showSelectButton={isMobile} // Only show button on mobile
-        />
-      )}
     </div>
   );
 }

@@ -8,11 +8,6 @@ interface IngredientPreviewProps {
   onSelect: () => void;
   isSelected: boolean;
   isDisabled: boolean;
-  // For positioning the floating preview on desktop
-  anchorRect?: DOMRect;
-  isMobile?: boolean;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
   showSelectButton?: boolean; // Only show button on mobile
 }
 
@@ -54,67 +49,14 @@ export default function IngredientPreview({
   onSelect,
   isSelected,
   isDisabled,
-  anchorRect,
-  isMobile = false,
-  onMouseEnter,
-  onMouseLeave,
   showSelectButton = true
 }: IngredientPreviewProps) {
   const previewRef = useRef<HTMLDivElement>(null);
-
-  // Close on escape key
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    if (isVisible) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [isVisible, onClose]);
-
-  // Position floating preview on desktop
-  const getFloatingPosition = () => {
-    if (!anchorRect) return {};
-    
-    const padding = 12;
-    const previewWidth = 400; // Increased for larger image
-    const previewHeight = 420; // Increased for larger image
-    
-    // Try to position to the right first
-    let left = anchorRect.right + padding;
-    let top = anchorRect.top;
-    
-    // If it would go off screen, position to the left
-    if (left + previewWidth > window.innerWidth) {
-      left = anchorRect.left - previewWidth - padding;
-    }
-    
-    // Keep it within viewport vertically
-    if (top + previewHeight > window.innerHeight) {
-      top = window.innerHeight - previewHeight - padding;
-    }
-    if (top < padding) {
-      top = padding;
-    }
-    
-    return {
-      position: 'fixed' as const,
-      left: `${left}px`,
-      top: `${top}px`,
-      zIndex: 1000
-    };
-  };
 
   if (!isVisible) return null;
 
   const description = getIngredientDescription(ingredient.name);
 
-  // Mobile modal version
-  if (isMobile) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div 
@@ -189,37 +131,5 @@ export default function IngredientPreview({
         </div>
       </div>
     );
-  }
 
-  // Desktop floating version
-  return (
-    <div
-      ref={previewRef}
-      className="bg-gray-900 border border-gray-600/30 rounded-xl p-6 shadow-2xl max-w-md"
-      style={getFloatingPosition()}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <div className="text-center mb-4">
-        <img
-          src={`/${ingredient.url}`}
-          alt={ingredient.name}
-          className="w-72 h-72 object-contain mx-auto mb-4 rounded-lg"
-        />
-        <h3 className="font-caudex text-xl font-medium text-gray-200 mb-2">
-          {ingredient.name}
-        </h3>
-      </div>
-      
-      <p className="text-gray-300 text-sm leading-relaxed mb-4">
-        {description}
-      </p>
-      
-      {!isMobile && (
-        <p className="text-gray-400 text-xs text-center">
-          Click ingredient again to {isSelected ? 'remove from' : 'add to'} potion
-        </p>
-      )}
-    </div>
-  );
 }

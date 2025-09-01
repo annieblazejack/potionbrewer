@@ -3,42 +3,31 @@
 import { useState, useEffect } from 'react';
 import ScatteredIngredientSelector from '@/components/ScatteredIngredientSelector';
 import IngredientHUD from '@/components/IngredientHUD';
-import LoadingIndicator from '@/components/LoadingIndicator';
 import ErrorDisplay from '@/components/ErrorDisplay';
 import PotionRecipe from '@/components/PotionRecipe';
 import OnboardingPopup from '@/components/OnboardingPopup';
 import InstructionTooltip from '@/components/InstructionTooltip';
 import { images } from '@/lib/image-manifest';
 
-interface PotionRecipeData {
-  name: string;
-  ingredients: string[];
-  instructions: string[];
-  effects: string[];
-  sideEffects: string[];
-  warnings: string[];
-  rawResponse?: string;
-}
-
 export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
-  const [recipe, setRecipe] = useState<PotionRecipeData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [recipe, setRecipe] = useState<string>('');
+
   const [error, setError] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
 
-  // Detect if device is mobile
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
-    };
+  // // Detect if device is mobile
+  // useEffect(() => {
+  //   const checkIsMobile = () => {
+  //     setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+  //   };
     
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    return () => window.removeEventListener('resize', checkIsMobile);
-  }, []);
+  //   checkIsMobile();
+  //   window.addEventListener('resize', checkIsMobile);
+  //   return () => window.removeEventListener('resize', checkIsMobile);
+  // }, []);
 
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
@@ -71,9 +60,8 @@ export default function Home() {
   const brewPotion = async () => {
     if (selectedIngredients.length < 2) return;
 
-    setIsLoading(true);
     setError(null);
-    setRecipe(null);
+    setRecipe('');
 
     try {
       const response = await fetch('/api/brew', {
@@ -88,12 +76,25 @@ export default function Home() {
         throw new Error('Failed to brew potion');
       }
 
-      const potionRecipe = await response.json();
-      setRecipe(potionRecipe);
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response body');
+      }
+
+      const decoder = new TextDecoder();
+      let accumulatedRecipe = '';
+
+              while (true) {
+          const { done, value } = await reader.read();
+        
+        if (done) break;
+        
+        const chunk = decoder.decode(value, { stream: true });
+        accumulatedRecipe += chunk;
+        setRecipe(accumulatedRecipe);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -107,26 +108,23 @@ export default function Home() {
         isMobile={isMobile}
       />
       
-      {!isLoading && !recipe && (
+      { !recipe && (
         <IngredientHUD
           ingredients={images}
           selectedIngredients={selectedIngredients}
           onToggleIngredient={toggleIngredient}
           onBrewPotion={brewPotion}
-          isLoading={isLoading}
         />
       )}
 
       <div className="pt-24 px-6 py-12">
-        {!isLoading && !recipe && (
+        { !recipe && (
           <ScatteredIngredientSelector
             ingredients={images}
             selectedIngredients={selectedIngredients}
             onToggleIngredient={toggleIngredient}
           />
         )}
-
-        <LoadingIndicator isVisible={isLoading} />
 
         <ErrorDisplay error={error} />
 
