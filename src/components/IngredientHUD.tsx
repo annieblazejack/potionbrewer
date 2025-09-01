@@ -17,7 +17,7 @@ export default function IngredientHUD({
   maxIngredients = 6
 }: IngredientHUDProps) {
   return (
-    <div className="fixed top-0 left-0 right-0 z-50">
+    <div className="fixed top-0 left-0 right-0 z-50" data-hud>
       <div className="max-w-6xl mx-auto px-6 py-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           {/* Left side - Header and Instructions */}

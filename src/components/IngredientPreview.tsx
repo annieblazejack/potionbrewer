@@ -1,5 +1,5 @@
 import { ImageManifest } from '@/lib/image-manifest';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface IngredientPreviewProps {
   ingredient: ImageManifest;
@@ -52,6 +52,17 @@ export default function IngredientPreview({
   showSelectButton = true
 }: IngredientPreviewProps) {
   const previewRef = useRef<HTMLDivElement>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) {
+      // Start fade-in animation
+      setIsAnimating(true);
+    } else {
+      // Reset animation state when hidden
+      setIsAnimating(false);
+    }
+  }, [isVisible]);
 
   if (!isVisible) return null;
 
@@ -60,13 +71,19 @@ export default function IngredientPreview({
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div 
-          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${
+            isAnimating ? 'opacity-100' : 'opacity-0'
+          }`}
           onClick={onClose}
         />
         
         <div 
           ref={previewRef}
-          className="relative bg-gray-900 border border-gray-600/30 rounded-xl p-6 max-w-sm w-full shadow-2xl"
+          className={`relative bg-gray-900 border border-gray-600/30 rounded-xl p-6 max-w-sm w-full shadow-2xl transition-all duration-500 ${
+            isAnimating 
+              ? 'opacity-100 scale-100 translate-y-0' 
+              : 'opacity-0 scale-95 translate-y-4'
+          }`}
         >
           <button
             onClick={onClose}

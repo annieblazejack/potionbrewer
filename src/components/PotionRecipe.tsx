@@ -1,15 +1,29 @@
 import ReactMarkdown from 'react-markdown';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 interface PotionRecipeProps {
   recipe: string;
 }
 
 export default function PotionRecipe({ recipe }: PotionRecipeProps) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (recipe) {
+      // Start fade-in animation when recipe is available
+      setIsVisible(true);
+    } else {
+      // Reset animation state when no recipe
+      setIsVisible(false);
+    }
+  }, [recipe]);
+
   if (!recipe) return null;
 
   return (
-    <article className="p-8">
+    <article className={`p-8 transition-opacity duration-500 ${
+      isVisible ? 'opacity-100' : 'opacity-0'
+    }`}>
       <div className="prose prose-lg max-w-none">
         <ReactMarkdown
           components={{

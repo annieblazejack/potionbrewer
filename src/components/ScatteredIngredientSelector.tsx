@@ -30,7 +30,6 @@ const SIZE_CONFIGS = {
 
 // Container dimensions - wide enough for 100 ingredients
 const CONTAINER_WIDTH = 4000;
-const CONTAINER_HEIGHT = 600;
 const PADDING = 20;
 
 // Collision detection function
@@ -49,7 +48,8 @@ function checkCollision(
 
 // Generate random positions with collision detection
 function generateScatteredPositions(
-  ingredients: ImageManifest[]
+  ingredients: ImageManifest[],
+  containerHeight: number
 ): IngredientWithPosition[] {
   const positions: IngredientPosition[] = [];
   const ingredientsWithPositions: IngredientWithPosition[] = [];
@@ -87,7 +87,7 @@ function generateScatteredPositions(
 
     while (attempts < 50 && !position) {
       const x = PADDING + random() * (CONTAINER_WIDTH - width - PADDING * 2);
-      const y = PADDING + random() * (CONTAINER_HEIGHT - height - PADDING * 2);
+      const y = PADDING + random() * (containerHeight - height - PADDING * 2);
 
       const candidatePosition: IngredientPosition = {
         x,
@@ -113,7 +113,7 @@ function generateScatteredPositions(
     // If we couldn't find a spot after 50 attempts, place it anyway but try to minimize overlap
     if (!position) {
       const x = PADDING + random() * (CONTAINER_WIDTH - width - PADDING * 2);
-      const y = PADDING + random() * (CONTAINER_HEIGHT - height - PADDING * 2);
+      const y = PADDING + random() * (containerHeight - height - PADDING * 2);
       position = { x, y, width, height, size };
       positions.push(position);
     }
@@ -134,6 +134,8 @@ export default function ScatteredIngredientSelector({
   maxIngredients = 6,
 }: ScatteredIngredientSelectorProps) {
   const [isClient, setIsClient] = useState(false);
+  const [windowHeight, setWindowHeight] = useState(0);
+  const [hudHeight, setHudHeight] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [previewingIngredient, setPreviewingIngredient] = useState<
     string | null
@@ -146,14 +148,40 @@ export default function ScatteredIngredientSelector({
 
   const isMobile = true;
 
+  // Calculate dynamic container height
+  const containerHeight = Math.max(600, windowHeight - hudHeight);
+
   useEffect(() => {
     setIsClient(true);
+    
+    // Set initial window height
+    setWindowHeight(window.innerHeight);
+    
+    // Measure HUD height
+    const hudElement = document.querySelector('[data-hud]');
+    if (hudElement) {
+      setHudHeight(hudElement.getBoundingClientRect().height);
+    }
+    
+    // Handle window resize
+    const handleResize = () => {
+      setWindowHeight(window.innerHeight);
+      if (hudElement) {
+        setHudHeight(hudElement.getBoundingClientRect().height);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   // Generate positions once and memoize them
   const ingredientsWithPositions = useMemo(() => {
-    return generateScatteredPositions(ingredients);
-  }, [ingredients]);
+    return generateScatteredPositions(ingredients, containerHeight);
+  }, [ingredients, containerHeight]);
 
   // Infinite scroll implementation
   useEffect(() => {
@@ -353,7 +381,7 @@ export default function ScatteredIngredientSelector({
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full -h">
       {/* Ingredient Preview */}
       {previewIngredient && (
         <IngredientPreview
@@ -373,15 +401,15 @@ export default function ScatteredIngredientSelector({
       {/* Horizontal scrolling container */}
       <div
         ref={scrollContainerRef}
-        className="overflow-x-auto overflow-y-hidden"
-        style={{ height: `${CONTAINER_HEIGHT}px` }}
+        className="overflow-x-auto overflow-y-hidden scrollbar-hide"
+        style={{ height: `${containerHeight}px` }}
       >
         {/* Double-wide container with duplicated content for infinite scroll */}
         <div
           className="relative"
           style={{
             width: `${CONTAINER_WIDTH * 2}px`,
-            height: `${CONTAINER_HEIGHT}px`,
+            height: `${containerHeight}px`,
             minWidth: `${CONTAINER_WIDTH * 2}px`,
           }}
         >
