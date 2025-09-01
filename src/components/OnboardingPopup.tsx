@@ -38,7 +38,7 @@ export default function OnboardingPopup({
         </button>
 
         <div className="text-center">
-          <h2 className="font-serif text-2xl font-medium text-gray-200 mb-4">
+          <h2 className="font-mono text-2xl font-medium text-gray-200 mb-4">
             Welcome to the Potion Brewer
           </h2>
           <p className="text-gray-300 leading-relaxed">

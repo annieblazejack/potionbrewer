@@ -23,7 +23,7 @@ export default function IngredientHUD({
           {/* Left side - Header and Instructions */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="text-center sm:text-left">
-              <h2 className="font-serif text-xl font-medium text-foreground mb-1">
+              <h2 className="font-mono text-xl font-medium text-foreground mb-1">
                 Select your ingredients ({selectedIngredients.length}/{maxIngredients})
               </h2>
             </div>

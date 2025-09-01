@@ -12,16 +12,27 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --color-border: var(--border);
-  --font-serif: Georgia, "Times New Roman", serif;
-  --font-sans: system-ui, sans-serif;
-  --font-mono: ui-monospace, monospace;
+  --font-serif: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "JetBrains Mono", ui-monospace, monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-caudex), serif;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
   line-height: 1.6;
+}
+
+/* Ensure all text elements use monospace font */
+* {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+/* Override any specific font classes to use monospace */
+.font-serif,
+.font-sans {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace !important;
 }
 
 

@@ -28,12 +28,12 @@ export default function PotionRecipe({ recipe }: PotionRecipeProps) {
         <ReactMarkdown
           components={{
             h1: ({ children }: { children?: ReactNode }) => (
-              <h1 className="font-serif text-4xl font-semibold text-foreground font-caudex-italic text-center mb-12">
+              <h1 className="font-mono text-4xl font-semibold text-foreground text-center mb-12">
                 {children}
               </h1>
             ),
             h2: ({ children }: { children?: ReactNode }) => (
-              <h2 className="font-serif text-xl font-semibold text-foreground mb-6">
+              <h2 className="font-mono text-xl font-semibold text-foreground mb-6">
                 {children}
               </h2>
             ),
@@ -52,19 +52,19 @@ export default function PotionRecipe({ recipe }: PotionRecipeProps) {
               const isOrdered = props.node?.parent?.type === 'list' && props.node?.parent?.ordered;
               if (isOrdered) {
                 return (
-                  <li className="font-serif text-foreground/80 pl-6 relative">
+                  <li className="font-mono text-foreground/80 pl-6 relative">
                     {children}
                   </li>
                 );
               }
               return (
-                <li className="font-serif text-foreground/80 pl-4">
+                <li className="font-mono text-foreground/80 pl-4">
                   {children}
                 </li>
               );
             },
             p: ({ children }: { children?: ReactNode }) => (
-              <p className="font-serif text-foreground/80 mb-4">
+              <p className="font-mono text-foreground/80 mb-4">
                 {children}
               </p>
             ),

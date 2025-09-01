@@ -79,7 +79,7 @@ export default function IngredientPreview({
         
         <div 
           ref={previewRef}
-          className={`relative bg-black border border-white p-12 max-w-sm w-full shadow-2xl transition-all duration-500 ${
+          className={`relative bg-black border border-gray-700 p-8 max-w-sm w-full shadow-2xl transition-all duration-500 ${
             isAnimating 
               ? 'opacity-100 scale-100 translate-y-0' 
               : 'opacity-0 scale-95 translate-y-4'
@@ -99,9 +99,9 @@ export default function IngredientPreview({
             <img
               src={`/${ingredient.thumbnails.xlarge}`}
               alt={ingredient.name}
-              className="object-contain mx-auto mb-3 rounded"
+              className="object-contain mx-auto p-12 rounded"
             />
-            <h3 className="font-caudex text-xl font-medium text-gray-200">
+            <h3 className="font-mono text-xl font-medium text-gray-200">
               {ingredient.name}
             </h3>
           </div>
@@ -118,7 +118,7 @@ export default function IngredientPreview({
                   onClose();
                 }}
                 disabled={isDisabled}
-                className={`px-8 py-3 font-medium border border-white transition-colors ${
+                className={`px-8 py-3 font-medium border border-white transition-colors cursor-pointer ${
                   isSelected
                     ? 'bg-red-600 hover:bg-red-500 text-white border-red-500'
                     : isDisabled

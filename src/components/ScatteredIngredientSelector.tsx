@@ -36,7 +36,7 @@ const PADDING = 20;
 function checkCollision(
   pos1: IngredientPosition,
   pos2: IngredientPosition,
-  buffer = 10
+  buffer = 30
 ): boolean {
   return !(
     pos1.x + pos1.width + buffer < pos2.x ||
@@ -335,7 +335,7 @@ export default function ScatteredIngredientSelector({
         onMouseLeave={handleMouseLeave}
         onKeyDown={(e) => handleKeyDown(ingredient, e)}
         disabled={false} // We handle disabled state in the preview now
-        className={`absolute p-3 transition-all font-medium flex flex-col items-center gap-2 justify-center bg-background text-foreground hover:bg-foreground/10 rounded-lg border border-gray-600/20 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+        className={`absolute p-3 transition-all font-medium flex flex-col items-center gap-2 justify-center bg-transparent text-foreground hover:bg-foreground/10 rounded-lg border border-gray-600/20 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
           isDisabled ? "opacity-50" : ""
         } ${
           previewingIngredient === ingredient.name ? "ring-2 ring-blue-400" : ""
