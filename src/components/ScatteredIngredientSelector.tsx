@@ -148,8 +148,8 @@ export default function ScatteredIngredientSelector({
 
   const isMobile = true;
 
-  // Calculate dynamic container height
-  const containerHeight = Math.max(600, windowHeight - hudHeight);
+  // Calculate dynamic container height - account for parent padding (pt-24 + py-12 = 144px)
+  const containerHeight = Math.max(600, windowHeight - hudHeight - 144);
 
   useEffect(() => {
     setIsClient(true);
@@ -381,7 +381,7 @@ export default function ScatteredIngredientSelector({
   }
 
   return (
-    <div className="w-full -h">
+    <div className="w-full h-full box-border">
       {/* Ingredient Preview */}
       {previewIngredient && (
         <IngredientPreview
@@ -401,7 +401,7 @@ export default function ScatteredIngredientSelector({
       {/* Horizontal scrolling container */}
       <div
         ref={scrollContainerRef}
-        className="overflow-x-auto overflow-y-hidden scrollbar-hide"
+        className="overflow-x-auto overflow-y-hidden scrollbar-hide box-border"
         style={{ height: `${containerHeight}px` }}
       >
         {/* Double-wide container with duplicated content for infinite scroll */}

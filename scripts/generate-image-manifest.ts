@@ -8,7 +8,8 @@ import sharp from 'sharp';
 const THUMBNAIL_SIZES = [
   { width: 64, height: 64, suffix: '-thumb' },
   { width: 128, height: 128, suffix: '-medium' },
-  { width: 256, height: 256, suffix: '-large' }
+  { width: 256, height: 256, suffix: '-large' },
+  { width: 512, height: 512, suffix: '-xlarge' }
 ];
 
 // Function to convert filename to readable name
@@ -69,7 +70,8 @@ async function generateImageManifest(): Promise<void> {
       file.toLowerCase().endsWith('.png') && 
       !file.includes('-thumb') && 
       !file.includes('-medium') && 
-      !file.includes('-large')
+      !file.includes('-large') &&
+      !file.includes('-xlarge')
     );
     
     console.log(`🖼️  Found ${originalFiles.length} original images`);
@@ -87,7 +89,8 @@ async function generateImageManifest(): Promise<void> {
         thumbnails: {
           small: thumbnails.find(t => t.includes('-thumb')) || `ingredients/${file}`,
           medium: thumbnails.find(t => t.includes('-medium')) || `ingredients/${file}`,
-          large: thumbnails.find(t => t.includes('-large')) || `ingredients/${file}`
+          large: thumbnails.find(t => t.includes('-large')) || `ingredients/${file}`,
+          xlarge: thumbnails.find(t => t.includes('-xlarge')) || `ingredients/${file}`
         }
       });
       
@@ -108,6 +111,7 @@ export interface ImageManifest {
     small: string;
     medium: string;
     large: string;
+    xlarge: string;
   };
 }
 
@@ -118,7 +122,8 @@ ${images.map(img => `  {
     thumbnails: {
       small: "${img.thumbnails.small}",
       medium: "${img.thumbnails.medium}",
-      large: "${img.thumbnails.large}"
+      large: "${img.thumbnails.large}",
+      xlarge: "${img.thumbnails.xlarge}"
     }
   }`).join(',\n')}
 ];
@@ -145,7 +150,7 @@ export default images;
     images.forEach(img => {
       console.log(`  - ${img.name}`);
       console.log(`    Original: ${img.url}`);
-      console.log(`    Thumbnails: ${img.thumbnails.small}, ${img.thumbnails.medium}, ${img.thumbnails.large}`);
+      console.log(`    Thumbnails: ${img.thumbnails.small}, ${img.thumbnails.medium}, ${img.thumbnails.large}, ${img.thumbnails.xlarge}`);
     });
     
   } catch (error) {

@@ -79,7 +79,7 @@ export default function IngredientPreview({
         
         <div 
           ref={previewRef}
-          className={`relative bg-gray-900 border border-gray-600/30 rounded-xl p-6 max-w-sm w-full shadow-2xl transition-all duration-500 ${
+          className={`relative bg-black border border-white p-12 max-w-sm w-full shadow-2xl transition-all duration-500 ${
             isAnimating 
               ? 'opacity-100 scale-100 translate-y-0' 
               : 'opacity-0 scale-95 translate-y-4'
@@ -87,7 +87,7 @@ export default function IngredientPreview({
         >
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-200 transition-colors"
+            className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors"
             aria-label="Close preview"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,9 +97,9 @@ export default function IngredientPreview({
           
           <div className="text-center mb-4">
             <img
-              src={`/${ingredient.thumbnails.large}`}
+              src={`/${ingredient.thumbnails.xlarge}`}
               alt={ingredient.name}
-              className="w-32 h-32 object-contain mx-auto mb-3 rounded"
+              className="object-contain mx-auto mb-3 rounded"
             />
             <h3 className="font-caudex text-xl font-medium text-gray-200">
               {ingredient.name}
@@ -111,40 +111,25 @@ export default function IngredientPreview({
           </p>
           
           {showSelectButton ? (
-            <div className="flex gap-3">
-              <button
-                onClick={onClose}
-                className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium rounded-lg transition-colors"
-              >
-                Close
-              </button>
+            <div className="flex justify-center">
               <button
                 onClick={() => {
                   onSelect();
                   onClose();
                 }}
                 disabled={isDisabled}
-                className={`flex-1 px-4 py-2 font-medium rounded-lg transition-colors ${
+                className={`px-8 py-3 font-medium border border-white transition-colors ${
                   isSelected
-                    ? 'bg-red-600 hover:bg-red-500 text-white'
+                    ? 'bg-red-600 hover:bg-red-500 text-white border-red-500'
                     : isDisabled
-                    ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 hover:bg-blue-500 text-white'
+                    ? 'bg-gray-600 text-gray-400 cursor-not-allowed border-gray-500'
+                    : 'bg-white hover:bg-gray-100 text-black border-white'
                 }`}
               >
                 {isSelected ? 'Remove' : 'Add to Potion'}
               </button>
             </div>
-          ) : (
-            <div className="text-center">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium rounded-lg transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
     );
