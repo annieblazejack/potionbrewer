@@ -18,6 +18,8 @@ function filenameToName(filename: string): string {
   const nameWithoutExt = filename.replace(/\.png$/i, '');
   
   // Convert camelCase or kebab-case to readable format
+  const acronyms = ['NCMA', 'NC', 'LGBTQ', 'TSA', 'NCCU', 'UNC', 'ACC', 'YMCA'];
+  //look for acronyms, don't pus spaces between those letters
   // Handle special cases like "TSAWater" -> "TSA Water"
   const readableName = nameWithoutExt
     .replace(/([A-Z])/g, ' $1') // Add space before capital letters
