@@ -35,10 +35,9 @@ Please provide a response in markdown format with the following structure:
 
 # Potion Name
 
-## Effects
+## Effect
 
 - Grants temporary flight for 1 hour
-- Enhances magical resistance
 
 ## Ingredients
 
