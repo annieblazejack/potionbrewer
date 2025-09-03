@@ -1,6 +1,7 @@
 import { ImageManifest } from '@/lib/image-manifest';
 import { useEffect, useRef, useState } from 'react';
 
+const acronyms = ['NCMA', 'NC', 'LGBTQ', 'TSA', 'NCCU', 'UNC', 'ACC'];
 interface IngredientPreviewProps {
   ingredient: ImageManifest;
   isVisible: boolean;
@@ -14,29 +15,68 @@ interface IngredientPreviewProps {
 // Sample ingredient descriptions - you can expand this with real data
 const getIngredientDescription = (name: string): string => {
   const descriptions: Record<string, string> = {
-    'Bull Statue': 'A weathered bronze statue representing strength and determination. Said to hold the power of ancient guardians.',
+    'Bull Statue': 'A meeting place at the center of the city of Durham with truly ample testicles.',
     'Corn Snake': 'A gentle serpent with vibrant orange and red patterns. Its shed skin is prized for transformation spells.',
     'Dandelion': 'A resilient flower that thrives anywhere. Its seeds carry wishes on the wind and dreams of new beginnings.',
-    'Fossil': 'Ancient remnants of creatures long gone. Contains the memory of eons and the wisdom of deep time.',
-    'Gardenia': 'A fragrant white bloom symbolizing purity and secret love. Its essence calms troubled spirits.',
-    'Goldfinch': 'A bright yellow songbird that brings joy and lightness. Its feathers are said to carry melodies of hope.',
-    'Icecream': 'A sweet frozen treat that captures moments of childhood wonder and simple pleasures.',
-    'Ladyslipper': 'A rare orchid that grows in shadowed forests. Legend says it grants protection to woodland travelers.',
-    'Lemur Fossil': 'The preserved remains of an ancient primate, holding secrets of evolution and adaptation.',
+    'Fossil': 'A jawbone from the Duke Lemur Center. Contains the memory of eons and the wisdom of deep time.',
+    'Gardenia': 'A fragrant white bloom. Its essence calms troubled spirits.',
+    'Goldfinch': 'A bright yellow songbird that brings joy and lightness. More difficult to please than your average backyard bird.',
+    'Icecream': 'A sweet frozen treat from Two Roosters.',
+    'Ladyslipper': 'A yonic orchid that grows in shadowed forests. Legend says it grants protection to woodland travelers.',
     'Library Book': 'A well-worn tome filled with knowledge and stories. Contains the collective wisdom of many minds.',
-    'Longleaf': 'A majestic pine that survives fire and time. Its needles whisper ancient forest songs.',
-    'Mating Moths': 'Two creatures drawn together by invisible forces. Represents the pull of deep connection.',
+    'Longleaf': 'A majestic pine that survives fire and time.',
+    'Mating Moths': 'Two rosy maple moths, drawn together.',
     'Moon': 'The celestial orb that guides tides and dreams. Source of nocturnal magic and silver light.',
-    'N C M A': 'A cultural artifact representing human creativity and artistic expression through the ages.',
+    'NCMA': 'Thomas Sayre\'s Gyre. A red clay monument.',
     'Opossum': 'A clever marsupial that plays dead to survive. Master of adaptation and resourcefulness.',
-    'Parking': 'A mundane urban element that speaks to modern life\'s search for space and belonging.',
-    'Ponysaurus': 'A mythical brewery creature that brings community together over craft and conversation.',
+    'Parking': 'A validated parking ticket, proof that you attended the city council meeting.',
+    'Ponysaurus': 'A tap handle representing the mythical brewery creature.',
     'Redbud': 'An early spring bloomer with heart-shaped leaves. Herald of renewal and fresh beginnings.',
-    'Shoelaces': 'Simple binding cords that connect us to our journeys. Every step tied to purpose.',
+    'Shoelaces': 'Taken from an ACC athlete. Still sweaty.',
     'Sycamore': 'A towering tree with distinctive bark that peels like parchment, revealing stories beneath.',
-    'T S A Water': 'Liquid confiscated at security checkpoints. Holds the frustrated energy of interrupted journeys.',
+    'TSA Water': 'Liquid confiscated at security checkpoints. Holds the frustrated energy of interrupted journeys.',
     'Tulip Poplar': 'A tall tree with tulip-shaped flowers. Bridges earth and sky with graceful strength.',
-    'Two Roosters': 'A frozen dessert representing local flavor and community gathering places.'
+    'Firefly' : '',
+    'Apple' : 'Taken from the barrel after a big steak dinner at the Angus Barn',
+    'Audio Cable' : 'Frayed, found amongst the detritus after a Sylvan Esso concert.',
+    'Bat Dog' : 'Steadfast companion to the Durham Bulls.',
+    'Bee' : '',
+    'Blackberries' : 'Picked from a bramble under a high voltage power line.',
+    'Bojangles' : 'Biscuit packaging, ideally found in a ditch by the side of a state road.',
+    'Brick' : 'A Fitzgerald Brick from the late 1800s.',
+    'Chanterelle' : 'Cinnamon Chantarelle mushrooms, bright and slender, found unexpectedly.',
+    'Cheerwine' : 'The soda with the cherry flavor and distinctive fizzy mouthfeel.',
+    'Cicaida' : 'Exoskeleton, shed by a cicada nymph when she was ready to grow up.',
+    'Cloth' : 'Still wet with tears cried over an ACC game.',
+    'Cockroach' : 'A survivor, and a harbinger of summer.',
+    'Coffee' : 'A fancy iced coffee from Coco Cinnamon, to be used before all the ice has melted.',
+    'Coins' : 'Found in a pocket, under a couch, or behind a dresser.',
+    'Condoms' : 'Given freely by the LGBTQ Center of Durham.',
+    'Copperhead' : '',
+    'Crown' : 'Worn by a Beaver Queen at the pageant.',
+    'Cypress Knees' : '',
+    'Death Cap' : '',
+    'Dumplings' : 'Rainbow dumplings from Sister Liu\'s',
+    'Eno River Water' : '',
+    'Essay' : 'Printed out on paper, with red corrections, written by a Duke undergrad.',
+    'False Parasol' : '',
+    'Feather' : '',
+    'Fig' : '',
+    'Grass' : 'Pampas grass',
+    'Honeysuckle' : 'Coral honeysuckle',
+    'Kudzu' : '',
+    'Leopard Frog' : '',
+    'Leopard Moth' : '',
+    'Magnolia' : '',
+    'Mama Ray' : 'Wangechi Mutu\'s sculpture at the Nasher.',
+    'Maypop' : 'Also known as passion flower.',
+    'Muscadine' : 'Ideally, scuppernongs.',
+    'Nest' : 'A robin\'s nest with little precious blue eggs in it.',
+    'Poison Ivy' : '',
+    'Red Spotted Purple' : '',
+    
+
+
   };
   
   return descriptions[name] || `A mysterious ingredient with unknown properties. Its true power awaits discovery.`;
