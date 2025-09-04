@@ -29,7 +29,7 @@ const SIZE_CONFIGS = {
 } as const;
 
 // Container dimensions - wide enough for 100 ingredients
-const CONTAINER_WIDTH = 4000;
+const CONTAINER_WIDTH = 8000;
 const PADDING = 20;
 
 // Collision detection function
@@ -131,7 +131,7 @@ export default function ScatteredIngredientSelector({
   ingredients,
   selectedIngredients,
   onToggleIngredient,
-  maxIngredients = 12,
+  maxIngredients = 6,
 }: ScatteredIngredientSelectorProps) {
   const [isClient, setIsClient] = useState(false);
   const [windowHeight, setWindowHeight] = useState(0);

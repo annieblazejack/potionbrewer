@@ -11,7 +11,7 @@ export default function IngredientHUD({
   ingredients,
   selectedIngredients,
   onToggleIngredient,
-  maxIngredients = 12
+  maxIngredients = 6
 }: IngredientHUDProps) {
   return (
     <div className="fixed top-0 left-0 right-0 z-50" data-hud>
@@ -28,7 +28,9 @@ export default function IngredientHUD({
                     className="px-4 py-2 bg-gray-1100 text-gray-200 text-sm font-medium flex items-center gap-2 rounded-lg hover:bg-gray-700 transition-all duration-300 cursor-pointer border border-gray-600/30 hover:border-gray-500/50 hover:scale-105 transform"
                     onClick={() => onToggleIngredient(ingredientName)}
                   >
+
                     {ingredientName}
+                    <span className="text-gray-400 hover:text-red-400 transition-colors duration-200 text-lg leading-none">×</span>
                   </span>
                 );
               })}

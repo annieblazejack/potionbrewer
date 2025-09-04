@@ -18,14 +18,25 @@ function filenameToName(filename: string): string {
   const nameWithoutExt = filename.replace(/\.png$/i, '');
   
   // Convert camelCase or kebab-case to readable format
-  const acronyms = ['NCMA', 'NC', 'LGBTQ', 'TSA', 'NCCU', 'UNC', 'ACC', 'YMCA'];
-  //look for acronyms, don't pus spaces between those letters
+  const acronyms = ['NCMA','NCCU','UNC','NC', 'LGBTQ', 'TSA', 'ACC', 'YMCA'];
+  const transformedAcronyms = acronyms.map(x => x.split("").join(" "));
+
   // Handle special cases like "TSAWater" -> "TSA Water"
-  const readableName = nameWithoutExt
+  let readableName = nameWithoutExt
     .replace(/([A-Z])/g, ' $1') // Add space before capital letters
     .replace(/^./, str => str.toUpperCase()) // Capitalize first letter
     .trim();
-  
+
+  // Replace acronyms with their original form
+  for (let i = 0; i < acronyms.length; i++) {
+    const acronym = acronyms[i];
+    const transformedAcronym = transformedAcronyms[i];
+    if (readableName.includes(transformedAcronym)) {
+      readableName = readableName.replace(transformedAcronym, acronym);
+      break;
+    }
+  }
+
   return readableName;
 }
 
@@ -83,6 +94,7 @@ async function generateImageManifest(): Promise<void> {
     
     for (const file of originalFiles) {
       const imagePath = path.join(ingredientsDir, file);
+
       const thumbnails = await generateThumbnails(imagePath, ingredientsDir, file);
       
       images.push({
