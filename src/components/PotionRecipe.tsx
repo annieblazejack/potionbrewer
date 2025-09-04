@@ -63,6 +63,7 @@ export default function PotionRecipe({
                   ...props
                 }: {
                   children?: ReactNode;
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   node?: any;
                 }) => {
                   const isOrdered =
