@@ -1,7 +1,7 @@
 import { ImageManifest } from '@/lib/image-manifest';
 import { useEffect, useRef, useState } from 'react';
 
-const acronyms = ['NCMA', 'NC', 'LGBTQ', 'TSA', 'NCCU', 'UNC', 'ACC', 'YMCA'];
+
 interface IngredientPreviewProps {
   ingredient: ImageManifest;
   isVisible: boolean;
