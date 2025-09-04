@@ -9,49 +9,53 @@ export async function POST(request: NextRequest) {
     if (!recipe || !ingredients) {
       return new Response(
         JSON.stringify({ error: 'Recipe and ingredients are required' }),
-        { 
+        {
           status: 400,
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         }
       );
     }
 
     // Generate a unique ID for the recipe
     const recipeId = uuidv4();
-    
+
     // Create the recipe data to store
     const recipeData = {
       recipe,
       ingredients,
       createdAt: new Date().toISOString(),
-      id: recipeId
+      id: recipeId,
     };
 
     // Store the recipe in Vercel Blob
-    const blob = await put(`recipes/${recipeId}.json`, JSON.stringify(recipeData), {
-      access: 'public',
-      contentType: 'application/json',
-    });
+    const blob = await put(
+      `recipes/${recipeId}.json`,
+      JSON.stringify(recipeData),
+      {
+        access: 'public',
+        contentType: 'application/json',
+      }
+    );
+
+    console.log(blob);
+    console.log(blob.url);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         recipeId,
-        url: blob.url 
+        url: blob.url,
       }),
-      { 
+      {
         status: 200,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       }
     );
   } catch (error) {
     console.error('Error saving recipe:', error);
-    return new Response(
-      JSON.stringify({ error: 'Failed to save recipe' }),
-      { 
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      }
-    );
+    return new Response(JSON.stringify({ error: 'Failed to save recipe' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
