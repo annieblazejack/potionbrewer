@@ -8,7 +8,11 @@ interface PotionRecipeProps {
   onBrewAgain?: () => void;
 }
 
-export default function PotionRecipe({ recipe, ingredients, onBrewAgain }: PotionRecipeProps) {
+export default function PotionRecipe({
+  recipe,
+  ingredients,
+  onBrewAgain,
+}: PotionRecipeProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
@@ -27,9 +31,11 @@ export default function PotionRecipe({ recipe, ingredients, onBrewAgain }: Potio
   return (
     <div className="w-full flex justify-center">
       <div className="max-w-4xl w-full">
-        <article className={`p-8 transition-opacity duration-500 ${
-          isVisible ? 'opacity-100' : 'opacity-0'
-        }`}>
+        <article
+          className={`p-8 transition-opacity duration-500 ${
+            isVisible ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
           <div className="prose prose-lg max-w-none">
             <ReactMarkdown
               components={{
@@ -44,9 +50,7 @@ export default function PotionRecipe({ recipe, ingredients, onBrewAgain }: Potio
                   </h2>
                 ),
                 ul: ({ children }: { children?: ReactNode }) => (
-                  <ul className="space-y-2 pb-6">
-                    {children}
-                  </ul>
+                  <ul className="space-y-2 pb-6">{children}</ul>
                 ),
                 ol: ({ children }: { children?: ReactNode }) => (
                   <ol className="list-decimal space-y-3  pb-6 pl-8">
@@ -54,8 +58,16 @@ export default function PotionRecipe({ recipe, ingredients, onBrewAgain }: Potio
                   </ol>
                 ),
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                li: ({ children, ...props }: { children?: ReactNode; node?: any }) => {
-                  const isOrdered = props.node?.parent?.type === 'list' && props.node?.parent?.ordered;
+                li: ({
+                  children,
+                  ...props
+                }: {
+                  children?: ReactNode;
+                  node?: any;
+                }) => {
+                  const isOrdered =
+                    props.node?.parent?.type === 'list' &&
+                    props.node?.parent?.ordered;
                   if (isOrdered) {
                     return (
                       <li className="font-mono text-foreground/80 pl-6 relative">
@@ -80,7 +92,7 @@ export default function PotionRecipe({ recipe, ingredients, onBrewAgain }: Potio
             </ReactMarkdown>
           </div>
         </article>
-        
+
         {/* Action Buttons */}
         {onBrewAgain && (
           <div className="flex justify-center gap-4 mt-12">

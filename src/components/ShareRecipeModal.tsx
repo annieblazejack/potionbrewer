@@ -99,7 +99,9 @@ export default function ShareRecipeModal({
           {!shareUrl ? (
             <>
               <p className="text-gray-300 leading-relaxed mb-6">
-                Save this recipe to share with other witches in the coven. They&apos;ll be able to view your creation and try it themselves.
+                Save this recipe to share with other witches in the coven.
+                They&apos;ll be able to view your creation and try it
+                themselves.
               </p>
 
               {error && (
@@ -123,21 +125,19 @@ export default function ShareRecipeModal({
               </p>
 
               <div className="mb-6 p-3 bg-gray-800/50 border border-gray-600/30 rounded">
-                <p className="text-sm text-gray-300 break-all">
-                  {shareUrl}
-                </p>
+                <p className="text-sm text-gray-300 break-all">{shareUrl}</p>
               </div>
 
               <div className="flex gap-3 justify-center">
                 <button
                   onClick={copyToClipboard}
-                  className="px-4 py-2 bg-gray-700 border border-gray-600/30 hover:bg-gray-600 text-white font-medium transition-colors"
+                  className="px-4 py-2 bg-gray-700 border border-gray-600/30 hover:bg-gray-600 text-white font-medium transition-colors cursor-pointer"
                 >
                   Copy Link
                 </button>
                 <button
                   onClick={onClose}
-                  className="px-4 py-2 bg-white text-black hover:bg-gray-100 font-medium transition-colors"
+                  className="px-4 py-2 bg-white text-black hover:bg-gray-100 font-medium transition-colors cursor-pointer"
                 >
                   Done
                 </button>
