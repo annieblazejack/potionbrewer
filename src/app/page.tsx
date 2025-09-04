@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import ScatteredIngredientSelector from '@/components/ScatteredIngredientSelector';
-import IngredientHUD from '@/components/IngredientHUD';
-import ErrorDisplay from '@/components/ErrorDisplay';
-import PotionRecipe from '@/components/PotionRecipe';
-import OnboardingPopup from '@/components/OnboardingPopup';
-import { images } from '@/lib/image-manifest';
-import BrewButton from '@/components/BrewButton';
+import { useState, useEffect } from "react";
+import ScatteredIngredientSelector from "@/components/ScatteredIngredientSelector";
+import IngredientHUD from "@/components/IngredientHUD";
+import ErrorDisplay from "@/components/ErrorDisplay";
+import PotionRecipe from "@/components/PotionRecipe";
+import OnboardingPopup from "@/components/OnboardingPopup";
+import { images } from "@/lib/image-manifest";
+import BrewButton from "@/components/BrewButton";
 
 export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
-  const [recipe, setRecipe] = useState<string>('');
+  const [recipe, setRecipe] = useState<string>("");
 
   const [error, setError] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
 
   useEffect(() => {
-    const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
+    const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
     if (!hasSeenOnboarding) {
       setShowOnboarding(true);
     }
@@ -26,8 +26,8 @@ export default function Home() {
 
   const handleCloseOnboarding = () => {
     setShowOnboarding(false);
-    localStorage.setItem('hasSeenOnboarding', 'true');
-    
+    localStorage.setItem("hasSeenOnboarding", "true");
+
     // Show instructions tooltip after onboarding closes
     setTimeout(() => {
       setShowInstructions(true);
@@ -45,53 +45,60 @@ export default function Home() {
     });
   };
 
+  const [streaming, setStreaming] = useState(false);
+
   const brewPotion = async () => {
     if (selectedIngredients.length < 2) return;
 
     setError(null);
-    setRecipe('');
+    setRecipe("");
+    setStreaming(true);
 
     try {
-      const response = await fetch('/api/brew', {
-        method: 'POST',
+      const response = await fetch("/api/brew", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ ingredients: selectedIngredients }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to brew potion');
+        throw new Error("Failed to brew potion");
       }
 
       const reader = response.body?.getReader();
       if (!reader) {
-        throw new Error('No response body');
+        throw new Error("No response body");
       }
 
       const decoder = new TextDecoder();
-      let accumulatedRecipe = '';
+      let accumulatedRecipe = "";
 
-              while (true) {
-          const { done, value } = await reader.read();
-        
+      while (true) {
+        const { done, value } = await reader.read();
+
         if (done) break;
-        
+
         const chunk = decoder.decode(value, { stream: true });
         accumulatedRecipe += chunk;
         setRecipe(accumulatedRecipe);
       }
+
+      setStreaming(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : "Something went wrong");
     }
   };
 
   return (
     <div className="min-h-screen bg-background">
-      <OnboardingPopup isVisible={showOnboarding} onClose={handleCloseOnboarding} />
-  
-      
-      { !recipe && (
+      <OnboardingPopup
+        isVisible={showOnboarding}
+        onClose={handleCloseOnboarding}
+      />
+
+      {!recipe && (
         <IngredientHUD
           ingredients={images}
           selectedIngredients={selectedIngredients}
@@ -116,7 +123,7 @@ export default function Home() {
       )}
 
       <div className="pt-24 py-12 pb-32">
-        { !recipe && (
+        {!recipe && (
           <ScatteredIngredientSelector
             ingredients={images}
             selectedIngredients={selectedIngredients}
@@ -126,9 +133,11 @@ export default function Home() {
 
         <ErrorDisplay error={error} />
 
-        <PotionRecipe recipe={recipe} />
+        <PotionRecipe recipe={recipe} onBrewAgain={streaming ? undefined : () => {
+          setRecipe("");
+          setSelectedIngredients([]);
+        }} />
       </div>
     </div>
   );
 }
-

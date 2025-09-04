@@ -3,9 +3,10 @@ import { ReactNode, useEffect, useState } from 'react';
 
 interface PotionRecipeProps {
   recipe: string;
+  onBrewAgain?: () => void;
 }
 
-export default function PotionRecipe({ recipe }: PotionRecipeProps) {
+export default function PotionRecipe({ recipe, onBrewAgain }: PotionRecipeProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -76,6 +77,18 @@ export default function PotionRecipe({ recipe }: PotionRecipeProps) {
             </ReactMarkdown>
           </div>
         </article>
+        
+        {/* Brew Again Button */}
+        {onBrewAgain && (
+          <div className="flex justify-center mt-12">
+            <button
+              onClick={onBrewAgain}
+              className="cursor-pointer bg-white text-black hover:bg-gray-100 font-semibold py-4 px-8 text-lg transition-all duration-300 border border-gray-300 hover:border-gray-400 shadow-lg hover:shadow-xl backdrop-blur-sm ring-2 ring-gray-500/20 hover:scale-105 transform hover:shadow-blue-500/25"
+            >
+              Brew Again
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
