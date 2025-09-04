@@ -15,7 +15,6 @@ export default function Home() {
 
   const [error, setError] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showInstructions, setShowInstructions] = useState(false);
 
   useEffect(() => {
     const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
@@ -27,11 +26,6 @@ export default function Home() {
   const handleCloseOnboarding = () => {
     setShowOnboarding(false);
     localStorage.setItem("hasSeenOnboarding", "true");
-
-    // Show instructions tooltip after onboarding closes
-    setTimeout(() => {
-      setShowInstructions(true);
-    }, 500);
   };
 
   const toggleIngredient = (ingredient: string) => {
