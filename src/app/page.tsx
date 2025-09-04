@@ -12,6 +12,7 @@ import BrewButton from "@/components/BrewButton";
 export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [recipe, setRecipe] = useState<string>("");
+  const [isLoadingRecipe, setIsLoadingRecipe] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -21,6 +22,45 @@ export default function Home() {
     if (!hasSeenOnboarding) {
       setShowOnboarding(true);
     }
+  }, []);
+
+  // Check for recipe query parameter on page load
+  useEffect(() => {
+    const checkForSharedRecipe = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const recipeId = urlParams.get('recipe');
+      
+      if (recipeId) {
+        setIsLoadingRecipe(true);
+        setError(null);
+        
+        try {
+          const response = await fetch(`/api/recipes/fetch?id=${recipeId}`);
+          
+          if (!response.ok) {
+            if (response.status === 404) {
+              setError('Recipe not found. It may have been deleted or the link is invalid.');
+            } else {
+              throw new Error('Failed to fetch recipe');
+            }
+            return;
+          }
+          
+          const data = await response.json();
+          setRecipe(data.recipe);
+          setSelectedIngredients(data.ingredients);
+          
+          // Clean up the URL
+          window.history.replaceState({}, '', window.location.pathname);
+        } catch (err) {
+          setError(err instanceof Error ? err.message : 'Something went wrong while loading the recipe');
+        } finally {
+          setIsLoadingRecipe(false);
+        }
+      }
+    };
+
+    checkForSharedRecipe();
   }, []);
 
   const handleCloseOnboarding = () => {
@@ -92,7 +132,7 @@ export default function Home() {
         onClose={handleCloseOnboarding}
       />
 
-      {!recipe && (
+      {!recipe && !isLoadingRecipe && (
         <IngredientHUD
           ingredients={images}
           selectedIngredients={selectedIngredients}
@@ -101,7 +141,7 @@ export default function Home() {
       )}
 
       {/* Footer with Brew Button */}
-      {!recipe && (
+      {!recipe && !isLoadingRecipe && (
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-background/98 via-background/95 to-background/90 backdrop-blur-md border-t border-gray-600/30 shadow-2xl">
           <div className="mx-auto px-6 py-6">
             <div className="flex justify-center">
@@ -117,7 +157,7 @@ export default function Home() {
       )}
 
       <div className="pt-24 py-12 pb-32">
-        {!recipe && (
+        {!recipe && !isLoadingRecipe && (
           <ScatteredIngredientSelector
             ingredients={images}
             selectedIngredients={selectedIngredients}
@@ -125,12 +165,26 @@ export default function Home() {
           />
         )}
 
+        {/* Loading state for shared recipes */}
+        {isLoadingRecipe && (
+          <div className="flex justify-center items-center min-h-[400px]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+              <p className="text-gray-300 font-mono">Loading shared recipe...</p>
+            </div>
+          </div>
+        )}
+
         <ErrorDisplay error={error} />
 
-        <PotionRecipe recipe={recipe} onBrewAgain={streaming ? undefined : () => {
-          setRecipe("");
-          setSelectedIngredients([]);
-        }} />
+        <PotionRecipe 
+          recipe={recipe} 
+          ingredients={selectedIngredients}
+          onBrewAgain={streaming ? undefined : () => {
+            setRecipe("");
+            setSelectedIngredients([]);
+          }} 
+        />
       </div>
     </div>
   );

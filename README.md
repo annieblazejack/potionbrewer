@@ -2,6 +2,22 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment Setup
+
+Create a `.env.local` file in the root directory with the following environment variables:
+
+```bash
+# Vercel Blob Configuration
+# Get this token from your Vercel dashboard:
+# Go to your project settings > Storage > Blob > Environment Variables
+BLOB_READ_WRITE_TOKEN=your_blob_read_write_token_here
+
+# OpenAI API Key
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+### Running the Development Server
+
 First, run the development server:
 
 ```bash
@@ -17,6 +33,13 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+## Features
+
+- **Potion Brewing**: Select ingredients and generate unique potion recipes using AI
+- **Recipe Sharing**: Save and share recipes with other witches using Vercel Blob storage
+- **Shared Recipe Loading**: Load shared recipes via URL query parameters (e.g., `?recipe=recipe-id`)
+- **Responsive Design**: Works on desktop and mobile devices
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 

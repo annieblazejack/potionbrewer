@@ -1,13 +1,16 @@
 import ReactMarkdown from 'react-markdown';
 import { ReactNode, useEffect, useState } from 'react';
+import ShareRecipeModal from './ShareRecipeModal';
 
 interface PotionRecipeProps {
   recipe: string;
+  ingredients: string[];
   onBrewAgain?: () => void;
 }
 
-export default function PotionRecipe({ recipe, onBrewAgain }: PotionRecipeProps) {
+export default function PotionRecipe({ recipe, ingredients, onBrewAgain }: PotionRecipeProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
     if (recipe) {
@@ -78,17 +81,31 @@ export default function PotionRecipe({ recipe, onBrewAgain }: PotionRecipeProps)
           </div>
         </article>
         
-        {/* Brew Again Button */}
+        {/* Action Buttons */}
         {onBrewAgain && (
-          <div className="flex justify-center mt-12">
+          <div className="flex justify-center gap-4 mt-12">
             <button
               onClick={onBrewAgain}
               className="cursor-pointer bg-white text-black hover:bg-gray-100 font-semibold py-4 px-8 text-lg transition-all duration-300 border border-gray-300 hover:border-gray-400 shadow-lg hover:shadow-xl backdrop-blur-sm ring-2 ring-gray-500/20 hover:scale-105 transform hover:shadow-blue-500/25"
             >
               Brew Again
             </button>
+            <button
+              onClick={() => setShowShareModal(true)}
+              className="cursor-pointer bg-gray-700 text-white hover:bg-gray-600 font-semibold py-4 px-8 text-lg transition-all duration-300 border border-gray-600 hover:border-gray-500 shadow-lg hover:shadow-xl backdrop-blur-sm ring-2 ring-gray-500/20 hover:scale-105 transform"
+            >
+              Share Recipe
+            </button>
           </div>
         )}
+
+        {/* Share Recipe Modal */}
+        <ShareRecipeModal
+          isVisible={showShareModal}
+          onClose={() => setShowShareModal(false)}
+          recipe={recipe}
+          ingredients={ingredients}
+        />
       </div>
     </div>
   );

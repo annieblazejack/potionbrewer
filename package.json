@@ -11,12 +11,14 @@
     "generate-images": "tsx scripts/generate-image-manifest.ts"
   },
   "dependencies": {
+    "@vercel/blob": "^1.1.1",
     "next": "15.5.0",
     "openai": "^5.13.1",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "react-markdown": "^9.0.1",
-    "tsx": "^4.20.5"
+    "tsx": "^4.20.5",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -24,6 +26,7 @@
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
+    "@types/uuid": "^10.0.0",
     "eslint": "^9.33.0",
     "eslint-config-next": "15.5.0",
     "tailwindcss": "^4.1.12",
