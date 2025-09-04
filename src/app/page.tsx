@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import ScatteredIngredientSelector from "@/components/ScatteredIngredientSelector";
-import IngredientHUD from "@/components/IngredientHUD";
-import ErrorDisplay from "@/components/ErrorDisplay";
-import PotionRecipe from "@/components/PotionRecipe";
-import OnboardingPopup from "@/components/OnboardingPopup";
-import { images } from "@/lib/image-manifest";
-import BrewButton from "@/components/BrewButton";
+import { useState, useEffect } from 'react';
+import ScatteredIngredientSelector from '@/components/ScatteredIngredientSelector';
+import IngredientHUD from '@/components/IngredientHUD';
+import ErrorDisplay from '@/components/ErrorDisplay';
+import PotionRecipe from '@/components/PotionRecipe';
+import OnboardingPopup from '@/components/OnboardingPopup';
+import { images } from '@/lib/image-manifest';
+import BrewButton from '@/components/BrewButton';
 
 export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
-  const [recipe, setRecipe] = useState<string>("");
+  const [recipe, setRecipe] = useState<string>('');
   const [isLoadingRecipe, setIsLoadingRecipe] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+    const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
     if (!hasSeenOnboarding) {
       setShowOnboarding(true);
     }
@@ -29,31 +29,37 @@ export default function Home() {
     const checkForSharedRecipe = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const recipeId = urlParams.get('recipe');
-      
+
       if (recipeId) {
         setIsLoadingRecipe(true);
         setError(null);
-        
+
         try {
           const response = await fetch(`/api/recipes/fetch?id=${recipeId}`);
-          
+
           if (!response.ok) {
             if (response.status === 404) {
-              setError('Recipe not found. It may have been deleted or the link is invalid.');
+              setError(
+                'Recipe not found. It may have been deleted or the link is invalid.'
+              );
             } else {
               throw new Error('Failed to fetch recipe');
             }
             return;
           }
-          
+
           const data = await response.json();
           setRecipe(data.recipe);
           setSelectedIngredients(data.ingredients);
-          
+
           // Clean up the URL
           window.history.replaceState({}, '', window.location.pathname);
         } catch (err) {
-          setError(err instanceof Error ? err.message : 'Something went wrong while loading the recipe');
+          setError(
+            err instanceof Error
+              ? err.message
+              : 'Something went wrong while loading the recipe'
+          );
         } finally {
           setIsLoadingRecipe(false);
         }
@@ -65,7 +71,7 @@ export default function Home() {
 
   const handleCloseOnboarding = () => {
     setShowOnboarding(false);
-    localStorage.setItem("hasSeenOnboarding", "true");
+    localStorage.setItem('hasSeenOnboarding', 'true');
   };
 
   const toggleIngredient = (ingredient: string) => {
@@ -81,33 +87,35 @@ export default function Home() {
 
   const [streaming, setStreaming] = useState(false);
 
+  console.log(streaming);
+
   const brewPotion = async () => {
     if (selectedIngredients.length < 2) return;
 
     setError(null);
-    setRecipe("");
+    setRecipe('');
     setStreaming(true);
 
     try {
-      const response = await fetch("/api/brew", {
-        method: "POST",
+      const response = await fetch('/api/brew', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ ingredients: selectedIngredients }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to brew potion");
+        throw new Error('Failed to brew potion');
       }
 
       const reader = response.body?.getReader();
       if (!reader) {
-        throw new Error("No response body");
+        throw new Error('No response body');
       }
 
       const decoder = new TextDecoder();
-      let accumulatedRecipe = "";
+      let accumulatedRecipe = '';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -121,7 +129,7 @@ export default function Home() {
 
       setStreaming(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : 'Something went wrong');
     }
   };
 
@@ -147,6 +155,7 @@ export default function Home() {
             <div className="flex justify-center">
               <div className="w-full max-w-md">
                 <BrewButton
+                  streaming={streaming}
                   onClick={brewPotion}
                   selectedCount={selectedIngredients.length}
                 />
@@ -170,20 +179,27 @@ export default function Home() {
           <div className="flex justify-center items-center min-h-[400px]">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-              <p className="text-gray-300 font-mono">Loading shared recipe...</p>
+              <p className="text-gray-300 font-mono">
+                Loading shared recipe...
+              </p>
             </div>
           </div>
         )}
 
         <ErrorDisplay error={error} />
 
-        <PotionRecipe 
-          recipe={recipe} 
+        <PotionRecipe
+          recipe={recipe}
           ingredients={selectedIngredients}
-          onBrewAgain={streaming ? undefined : () => {
-            setRecipe("");
-            setSelectedIngredients([]);
-          }} 
+          onBrewAgain={
+            streaming
+              ? undefined
+              : () => {
+                  setStreaming(false);
+                  setRecipe('');
+                  setSelectedIngredients([]);
+                }
+          }
         />
       </div>
     </div>
