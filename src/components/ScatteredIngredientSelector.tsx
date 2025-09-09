@@ -134,9 +134,9 @@ export default function ScatteredIngredientSelector({
   maxIngredients = 6,
 }: ScatteredIngredientSelectorProps) {
   const [isClient, setIsClient] = useState(false);
-  const [windowHeight, setWindowHeight] = useState(0);
-  const [hudHeight, setHudHeight] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(600); // Default fallback height
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [previewingIngredient, setPreviewingIngredient] = useState<
     string | null
   >(null);
@@ -148,36 +148,15 @@ export default function ScatteredIngredientSelector({
 
   const isMobile = true;
 
-  // Calculate dynamic container height - account for parent padding (pt-24 + py-12 = 144px)
-  // Add additional padding for top and bottom spacing, plus footer height
-  const containerHeight = Math.min(800, windowHeight - hudHeight - 120 - 100); // 120px for additional padding, 100px for footer
-
   useEffect(() => {
     setIsClient(true);
     
-    // Set initial window height
-    setWindowHeight(window.innerHeight);
-    
-    // Measure HUD height
-    const hudElement = document.querySelector('[data-hud]');
-    if (hudElement) {
-      setHudHeight(hudElement.getBoundingClientRect().height);
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      console.log("rect", rect);
+      setContainerHeight(rect.height);
     }
-    
-    // Handle window resize
-    const handleResize = () => {
-      setWindowHeight(window.innerHeight);
-      if (hudElement) {
-        setHudHeight(hudElement.getBoundingClientRect().height);
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  }, [isClient]);
 
   // Generate positions once and memoize them
   const ingredientsWithPositions = useMemo(() => {
@@ -382,7 +361,7 @@ export default function ScatteredIngredientSelector({
   }
 
   return (
-    <div className="w-full h-full box-border">
+    <div ref={containerRef} className="w-full h-full box-border flex flex-col">
       {/* Ingredient Preview */}
       {previewIngredient && (
         <IngredientPreview
@@ -402,7 +381,7 @@ export default function ScatteredIngredientSelector({
       {/* Horizontal scrolling container */}
       <div
         ref={scrollContainerRef}
-        className="overflow-x-auto overflow-y-hidden scrollbar-hide box-border"
+        className="overflow-x-auto overflow-y-hidden scrollbar-hide box-border flex-grow"
         style={{ height: `${containerHeight}px` }}
       >
         {/* Double-wide container with duplicated content for infinite scroll */}

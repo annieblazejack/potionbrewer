@@ -96,16 +96,16 @@ export default function PotionRecipe({
 
         {/* Action Buttons */}
         {onBrewAgain && (
-          <div className="flex justify-center gap-4 mt-12">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-12 mb-12 px-4">
             <button
               onClick={onBrewAgain}
-              className="cursor-pointer bg-white text-black hover:bg-gray-100 font-semibold py-4 px-8 text-lg transition-all duration-300 border border-gray-300 hover:border-gray-400 shadow-lg hover:shadow-xl backdrop-blur-sm ring-2 ring-gray-500/20 hover:scale-105 transform hover:shadow-blue-500/25"
+              className="cursor-pointer bg-white text-black hover:bg-gray-100 font-semibold py-3 px-6 text-base sm:text-lg transition-all duration-300 border border-gray-300 hover:border-gray-400 shadow-lg hover:shadow-xl backdrop-blur-sm ring-2 ring-gray-500/20 hover:scale-105 transform hover:shadow-blue-500/25"
             >
               Brew Again
             </button>
             <button
               onClick={() => setShowShareModal(true)}
-              className="cursor-pointer bg-gray-700 text-white hover:bg-gray-600 font-semibold py-4 px-8 text-lg transition-all duration-300 border border-gray-600 hover:border-gray-500 shadow-lg hover:shadow-xl backdrop-blur-sm ring-2 ring-gray-500/20 hover:scale-105 transform"
+              className="cursor-pointer bg-gray-700 text-white hover:bg-gray-600 font-semibold py-3 px-6 text-base sm:text-lg transition-all duration-300 border border-gray-600 hover:border-gray-500 shadow-lg hover:shadow-xl backdrop-blur-sm ring-2 ring-gray-500/20 hover:scale-105 transform"
             >
               Share Recipe
             </button>

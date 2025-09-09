@@ -17,7 +17,7 @@ export default function BrewButton({
     <button
       onClick={onClick}
       disabled={streaming || disabled || selectedCount < minIngredients}
-      className="cursor-pointer w-full bg-white text-black hover:bg-gray-100 disabled:bg-black disabled:text-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed font-semibold py-4 px-8 text-lg transition-all duration-300 border border-gray-300 hover:border-gray-400 shadow-lg hover:shadow-xl backdrop-blur-sm enabled:ring-2 enabled:ring-gray-500/20 hover:scale-105 transform hover:shadow-blue-500/25"
+      className="cursor-pointer max-w-md w-full bg-white text-black hover:bg-gray-100 disabled:bg-black disabled:text-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed font-semibold py-4 px-8 text-lg transition-all duration-300 border border-gray-300 hover:border-gray-400 shadow-lg hover:shadow-xl backdrop-blur-sm enabled:ring-2 enabled:ring-gray-500/20 hover:scale-105 transform hover:shadow-blue-500/25"
     >
       {streaming ? 'Brewing...' : 'Brew Potion'}
     </button>

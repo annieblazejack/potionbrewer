@@ -113,7 +113,7 @@ export default function ShareRecipeModal({
               <button
                 onClick={handleShare}
                 disabled={isSharing}
-                className="px-6 py-2 bg-white text-black hover:bg-gray-100 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-white text-black hover:bg-gray-100 font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSharing ? 'Saving...' : 'Save & Share'}
               </button>

@@ -47,7 +47,7 @@ export default function IngredientPreview({
         
         <div 
           ref={previewRef}
-          className={`relative bg-black border border-gray-700 p-8 max-w-sm w-full shadow-2xl transition-all duration-500 ${
+          className={`relative bg-black border border-gray-700 p-8 max-w-sm w-full max-h-[90vh] shadow-2xl transition-all duration-500 ${
             isAnimating 
               ? 'opacity-100 scale-100 translate-y-0' 
               : 'opacity-0 scale-95 translate-y-4'
@@ -63,20 +63,25 @@ export default function IngredientPreview({
             </svg>
           </button>
           
-          <div className="text-center mb-4">
-            <img
-              src={`/${ingredient.thumbnails.xlarge}`}
-              alt={ingredient.name}
-              className="object-contain mx-auto p-12 rounded"
-            />
-            <h4 className="font-mono text-xl font-medium text-gray-200 pb-8">
-              {ingredient.name}
-            </h4>
+          <div className="flex flex-col h-full">
+            <div className="flex-1 flex flex-col justify-center min-h-0">
+              <img
+                src={`/${ingredient.thumbnails.xlarge}`}
+                alt={ingredient.name}
+                className="object-contain mx-auto rounded max-h-full max-w-full"
+                style={{ maxHeight: 'calc(90vh - 200px)' }}
+              />
+            </div>
+            <div className="text-center mt-4 flex-shrink-0">
+              <h4 className="font-mono text-xl font-medium text-gray-200">
+                {ingredient.name}
+              </h4>
+            </div>
           </div>
 
           
           {showSelectButton ? (
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-4 flex-shrink-0">
               <button
                 onClick={() => {
                   onSelect();

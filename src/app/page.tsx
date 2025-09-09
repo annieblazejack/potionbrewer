@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import ScatteredIngredientSelector from '@/components/ScatteredIngredientSelector';
-import IngredientHUD from '@/components/IngredientHUD';
-import ErrorDisplay from '@/components/ErrorDisplay';
-import PotionRecipe from '@/components/PotionRecipe';
-import OnboardingPopup from '@/components/OnboardingPopup';
-import { images } from '@/lib/image-manifest';
-import BrewButton from '@/components/BrewButton';
+import { useState, useEffect } from "react";
+import ScatteredIngredientSelector from "@/components/ScatteredIngredientSelector";
+import IngredientHUD from "@/components/IngredientHUD";
+import ErrorDisplay from "@/components/ErrorDisplay";
+import PotionRecipe from "@/components/PotionRecipe";
+import OnboardingPopup from "@/components/OnboardingPopup";
+import { images } from "@/lib/image-manifest";
+import BrewButton from "@/components/BrewButton";
 
 export default function Home() {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
-  const [recipe, setRecipe] = useState<string>('');
+  const [recipe, setRecipe] = useState<string>("");
   const [isLoadingRecipe, setIsLoadingRecipe] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
+    const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
     if (!hasSeenOnboarding) {
       setShowOnboarding(true);
     }
@@ -28,7 +28,7 @@ export default function Home() {
   useEffect(() => {
     const checkForSharedRecipe = async () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const recipeId = urlParams.get('recipe');
+      const recipeId = urlParams.get("recipe");
 
       if (recipeId) {
         setIsLoadingRecipe(true);
@@ -40,10 +40,10 @@ export default function Home() {
           if (!response.ok) {
             if (response.status === 404) {
               setError(
-                'Recipe not found. It may have been deleted or the link is invalid.'
+                "Recipe not found. It may have been deleted or the link is invalid."
               );
             } else {
-              throw new Error('Failed to fetch recipe');
+              throw new Error("Failed to fetch recipe");
             }
             return;
           }
@@ -53,12 +53,12 @@ export default function Home() {
           setSelectedIngredients(data.ingredients);
 
           // Clean up the URL
-          window.history.replaceState({}, '', window.location.pathname);
+          window.history.replaceState({}, "", window.location.pathname);
         } catch (err) {
           setError(
             err instanceof Error
               ? err.message
-              : 'Something went wrong while loading the recipe'
+              : "Something went wrong while loading the recipe"
           );
         } finally {
           setIsLoadingRecipe(false);
@@ -71,7 +71,7 @@ export default function Home() {
 
   const handleCloseOnboarding = () => {
     setShowOnboarding(false);
-    localStorage.setItem('hasSeenOnboarding', 'true');
+    localStorage.setItem("hasSeenOnboarding", "true");
   };
 
   const toggleIngredient = (ingredient: string) => {
@@ -87,35 +87,34 @@ export default function Home() {
 
   const [streaming, setStreaming] = useState(false);
 
-  console.log(streaming);
 
   const brewPotion = async () => {
     if (selectedIngredients.length < 2) return;
 
     setError(null);
-    setRecipe('');
+    setRecipe("");
     setStreaming(true);
 
     try {
-      const response = await fetch('/api/brew', {
-        method: 'POST',
+      const response = await fetch("/api/brew", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ ingredients: selectedIngredients }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to brew potion');
+        throw new Error("Failed to brew potion");
       }
 
       const reader = response.body?.getReader();
       if (!reader) {
-        throw new Error('No response body');
+        throw new Error("No response body");
       }
 
       const decoder = new TextDecoder();
-      let accumulatedRecipe = '';
+      let accumulatedRecipe = "";
 
       while (true) {
         const { done, value } = await reader.read();
@@ -129,79 +128,73 @@ export default function Home() {
 
       setStreaming(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : "Something went wrong");
     }
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background flex flex-col h-screen overflow-hidden">
       <OnboardingPopup
         isVisible={showOnboarding}
         onClose={handleCloseOnboarding}
       />
 
       {!recipe && !isLoadingRecipe && (
-        <IngredientHUD
-          ingredients={images}
-          selectedIngredients={selectedIngredients}
-          onToggleIngredient={toggleIngredient}
-        />
-      )}
-
-      {/* Footer with Brew Button */}
-      {!recipe && !isLoadingRecipe && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-background/98 via-background/95 to-background/90 backdrop-blur-md border-t border-gray-600/30 shadow-2xl">
-          <div className="mx-auto px-6 py-6">
-            <div className="flex justify-center">
-              <div className="w-full max-w-md">
-                <BrewButton
-                  streaming={streaming}
-                  onClick={brewPotion}
-                  selectedCount={selectedIngredients.length}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="pt-24 py-12 pb-32">
-        {!recipe && !isLoadingRecipe && (
-          <ScatteredIngredientSelector
+        <>
+          <IngredientHUD
             ingredients={images}
             selectedIngredients={selectedIngredients}
             onToggleIngredient={toggleIngredient}
           />
-        )}
 
-        {/* Loading state for shared recipes */}
-        {isLoadingRecipe && (
-          <div className="flex justify-center items-center min-h-[400px]">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-              <p className="text-gray-300 font-mono">
-                Loading shared recipe...
-              </p>
-            </div>
+          <div className="flex-grow overflow-hidden">
+            <ScatteredIngredientSelector
+              ingredients={images}
+              selectedIngredients={selectedIngredients}
+              onToggleIngredient={toggleIngredient}
+            />
           </div>
-        )}
 
-        <ErrorDisplay error={error} />
+          <div className="p-4 max-w-md mx-auto" id="brew-button-container">
+            <BrewButton
+              streaming={streaming}
+              onClick={brewPotion}
+              selectedCount={selectedIngredients.length}
+            />
+          </div>
+        </>
+      )}
 
-        <PotionRecipe
-          recipe={recipe}
-          ingredients={selectedIngredients}
-          onBrewAgain={
-            streaming
-              ? undefined
-              : () => {
-                  setStreaming(false);
-                  setRecipe('');
-                  setSelectedIngredients([]);
-                }
-          }
-        />
-      </div>
+      {/* Recipe Content */}
+      {recipe && (
+        <div className="flex-grow overflow-auto">
+          <PotionRecipe
+            recipe={recipe}
+            ingredients={selectedIngredients}
+            onBrewAgain={
+              streaming
+                ? undefined
+                : () => {
+                    setStreaming(false);
+                    setRecipe("");
+                    setSelectedIngredients([]);
+                  }
+            }
+          />
+        </div>
+      )}
+
+      {/* Loading state for shared recipes */}
+      {isLoadingRecipe && (
+        <div className="flex-grow flex justify-center items-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+            <p className="text-gray-300 font-mono">Loading shared recipe...</p>
+          </div>
+        </div>
+      )}
+
+      <ErrorDisplay error={error} />
     </div>
   );
 }
