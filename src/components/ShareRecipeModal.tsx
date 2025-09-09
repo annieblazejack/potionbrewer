@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useToast } from '@/contexts/ToastContext';
 
 interface ShareRecipeModalProps {
   isVisible: boolean;
@@ -16,6 +17,7 @@ export default function ShareRecipeModal({
   const [isSharing, setIsSharing] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   const handleShare = async () => {
     if (!recipe || ingredients.length === 0) return;
@@ -54,9 +56,10 @@ export default function ShareRecipeModal({
     if (shareUrl) {
       try {
         await navigator.clipboard.writeText(shareUrl);
-        // You could add a toast notification here
+        showToast('Link copied to clipboard!');
       } catch (err) {
         console.error('Failed to copy to clipboard:', err);
+        showToast('Failed to copy link', 5000);
       }
     }
   };

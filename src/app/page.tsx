@@ -171,6 +171,7 @@ export default function Home() {
           <PotionRecipe
             recipe={recipe}
             ingredients={selectedIngredients}
+            streaming={streaming}
             onBrewAgain={
               streaming
                 ? undefined

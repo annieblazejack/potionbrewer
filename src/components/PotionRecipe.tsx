@@ -1,20 +1,24 @@
 import ReactMarkdown from 'react-markdown';
 import { ReactNode, useEffect, useState } from 'react';
 import ShareRecipeModal from './ShareRecipeModal';
+import AboutModal from './AboutModal';
 
 interface PotionRecipeProps {
   recipe: string;
   ingredients: string[];
   onBrewAgain?: () => void;
+  streaming?: boolean;
 }
 
 export default function PotionRecipe({
   recipe,
   ingredients,
   onBrewAgain,
+  streaming = false,
 }: PotionRecipeProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
 
   useEffect(() => {
     if (recipe) {
@@ -96,7 +100,7 @@ export default function PotionRecipe({
 
         {/* Action Buttons */}
         {onBrewAgain && (
-          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-12 mb-12 px-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-12 mb-8 px-4">
             <button
               onClick={onBrewAgain}
               className="cursor-pointer bg-white text-black hover:bg-gray-100 font-semibold py-3 px-6 text-base sm:text-lg transition-all duration-300 border border-gray-300 hover:border-gray-400 shadow-lg hover:shadow-xl backdrop-blur-sm ring-2 ring-gray-500/20 hover:scale-105 transform hover:shadow-blue-500/25"
@@ -112,12 +116,30 @@ export default function PotionRecipe({
           </div>
         )}
 
+        {/* About Link - only show when not streaming */}
+        {!streaming && (
+          <div className="text-center mb-12">
+            <button
+              onClick={() => setShowAboutModal(true)}
+              className="text-gray-500 hover:text-gray-700 text-sm underline transition-colors duration-200"
+            >
+              About
+            </button>
+          </div>
+        )}
+
         {/* Share Recipe Modal */}
         <ShareRecipeModal
           isVisible={showShareModal}
           onClose={() => setShowShareModal(false)}
           recipe={recipe}
           ingredients={ingredients}
+        />
+
+        {/* About Modal */}
+        <AboutModal
+          isVisible={showAboutModal}
+          onClose={() => setShowAboutModal(false)}
         />
       </div>
     </div>
