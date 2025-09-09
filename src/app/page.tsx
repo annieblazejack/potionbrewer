@@ -133,7 +133,7 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-background flex flex-col h-screen overflow-hidden">
+    <div className="bg-background flex flex-col h-screen-custom overflow-hidden">
       <OnboardingPopup
         isVisible={showOnboarding}
         onClose={handleCloseOnboarding}

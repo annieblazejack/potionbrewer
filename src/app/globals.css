@@ -5,6 +5,7 @@
   --foreground: #f5f5f5;
   --accent: #1a1a1a;
   --border: #2a2a2a;
+  --vh: 1vh; /* Fallback for browsers that do not support Custom Properties */
 }
 
 @theme inline {
@@ -79,4 +80,20 @@ body {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;  /* Safari and Chrome */
+}
+
+/* Custom viewport height using CSS custom property */
+.h-screen-custom {
+  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+  height: calc(var(--vh, 1vh) * 100);
+}
+
+.max-h-screen-custom-90 {
+  max-height: 90vh; /* Fallback for browsers that do not support Custom Properties */
+  max-height: calc(var(--vh, 1vh) * 90);
+}
+
+.max-h-screen-custom-90-minus-200 {
+  max-height: calc(90vh - 200px); /* Fallback for browsers that do not support Custom Properties */
+  max-height: calc(calc(var(--vh, 1vh) * 90) - 200px);
 }

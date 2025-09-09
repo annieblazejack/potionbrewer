@@ -47,7 +47,7 @@ export default function IngredientPreview({
         
         <div 
           ref={previewRef}
-          className={`relative bg-black border border-gray-700 p-8 max-w-sm w-full max-h-[90vh] shadow-2xl transition-all duration-500 ${
+          className={`relative bg-black border border-gray-700 p-8 max-w-sm w-full max-h-screen-custom-90 shadow-2xl transition-all duration-500 ${
             isAnimating 
               ? 'opacity-100 scale-100 translate-y-0' 
               : 'opacity-0 scale-95 translate-y-4'
@@ -68,8 +68,7 @@ export default function IngredientPreview({
               <img
                 src={`/${ingredient.thumbnails.xlarge}`}
                 alt={ingredient.name}
-                className="object-contain mx-auto rounded max-h-full max-w-full"
-                style={{ maxHeight: 'calc(90vh - 200px)' }}
+                className="object-contain mx-auto rounded max-h-full max-w-full max-h-screen-custom-90-minus-200"
               />
             </div>
             <div className="text-center mt-4 flex-shrink-0">
