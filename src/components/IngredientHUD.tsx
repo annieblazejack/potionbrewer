@@ -1,4 +1,5 @@
 import { ImageManifest } from '@/lib/image-manifest';
+import { useEffect, useRef } from 'react';
 
 interface IngredientHUDProps {
   ingredients: ImageManifest[];
@@ -13,11 +14,20 @@ export default function IngredientHUD({
   onToggleIngredient,
   maxIngredients = 6
 }: IngredientHUDProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to the right when new ingredients are added
+  useEffect(() => {
+    if (scrollContainerRef.current && selectedIngredients.length > 0) {
+      scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+    }
+  }, [selectedIngredients.length]);
+
   return (
-    <div className="w-full mx-auto px-6 py-6 flex flex-col items-center justify-center gap-6 overflow-y-hidden overflow-x-auto" data-hud>
+    <div className="w-full p-6 overflow-y-hidden overflow-x-auto" data-hud ref={scrollContainerRef}>
       {/* Centered Selected Ingredients or Choose Ingredients Text */}
       {selectedIngredients.length > 0 ? (
-        <div className="flex gap-3 justify-center whitespace-nowrap w-full">
+        <div className="flex gap-3 justify-center whitespace-nowrap px-4 min-w-max">
           {selectedIngredients.map(ingredientName => {
             return (
               <span
@@ -33,7 +43,7 @@ export default function IngredientHUD({
           })}
         </div>
       ) : (
-        <div className="text-gray-400 text-lg font-medium">
+        <div className="text-gray-400 text-lg font-medium text-center">
           Choose Your Ingredients
         </div>
       )}
