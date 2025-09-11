@@ -221,6 +221,7 @@ Next Example:
       ', '
     )}.
 
+Don't add extra ingredients.
 Please provide a response in markdown format with the same structure as the examples.
 
 

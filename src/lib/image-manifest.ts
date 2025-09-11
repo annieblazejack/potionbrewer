@@ -374,13 +374,13 @@ export const images: ImageManifest[] = [
     }
   },
   {
-    url: "ingredients/glitterFromTheFruit.png",
-    name: "Glitter From The Fruit",
+    url: "ingredients/glitterFromTheFloorOfTheFruit.png",
+    name: "Glitter From the Floor of the Fruit",
     thumbnails: {
-      small: "ingredients/glitterFromTheFruit-thumb.png",
-      medium: "ingredients/glitterFromTheFruit-medium.png",
-      large: "ingredients/glitterFromTheFruit-large.png",
-      xlarge: "ingredients/glitterFromTheFruit-xlarge.png"
+      small: "ingredients/glitterFromTheFloorOfTheFruit-thumb.png",
+      medium: "ingredients/glitterFromTheFloorOfTheFruit-medium.png",
+      large: "ingredients/glitterFromTheFloorOfTheFruit-large.png",
+      xlarge: "ingredients/glitterFromTheFloorOfTheFruit-xlarge.png"
     }
   },
   {
@@ -494,13 +494,13 @@ export const images: ImageManifest[] = [
     }
   },
   {
-    url: "ingredients/lunamothwing.png",
-    name: "Lunamothwing",
+    url: "ingredients/lunaMothWing.png",
+    name: "Luna Moth Wing",
     thumbnails: {
-      small: "ingredients/lunamothwing-thumb.png",
-      medium: "ingredients/lunamothwing-medium.png",
-      large: "ingredients/lunamothwing-large.png",
-      xlarge: "ingredients/lunamothwing-xlarge.png"
+      small: "ingredients/lunaMothWing-thumb.png",
+      medium: "ingredients/lunaMothWing-medium.png",
+      large: "ingredients/lunaMothWing-large.png",
+      xlarge: "ingredients/lunaMothWing-xlarge.png"
     }
   },
   {
