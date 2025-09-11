@@ -37,6 +37,44 @@ export async function POST(request: NextRequest) {
     
     Here are some example potions. Don't copy them, make up your own.
 
+    # Tangled Plot
+
+    ## Effect
+    - This potion grants a single spider the ability to write legible, mutable language in its web—true language. What it writes alters the narratives unfolding around it. We’re talking major changes in the original plans of the Fates. The effect lasts until the spider molts, or gets bored with your narrative arc.
+  
+    ##  Ingredients
+
+    - Three feet of kudzu, pulled barehanded from a fence that could no longer bear its weight.
+    - A generous pinch of glitter, swept from the floor of The Fruit after closing—ideally post-drag show.
+
+    ## Instructions
+
+    1. Use a cast-iron cauldron that once belonged to someone who left all their artworks untitled.
+    2. Coil the kudzu tightly in the bottom of the cauldron, winding it like a spiderweb you just walked face first into. Let it rest there until you feel a little sorry for it.
+    3. Light a fire beneath the cauldron—must be fueled by oak and junk mail. As the kudzu heats, it will emit a smell like split sap and yesterday’s breakfast. Stir with a spoon that has never touched food.
+    4. Once the kudzu begins to sweat green, sprinkle the glitter in slowly. Not all at once. Whisper a sentence you’ve rewritten too many times. The mixture should hiss—not boil—at the contact.
+    5. When the potion turns the color of a bruise under stage lighting, remove from heat and plunge into an ice bath.
+    6. Strain through the mesh of a broken window screen and bottle in a glass vial—one that used to hold paint water, perfume, or regret. Store out of reach of children, houseguests, and plot holes.
+
+    ## To Use
+
+    - Locate a spider with an existing web. It must have built the web itself, recently, and with clear intention. With a brush made from your own hair, paint a single drop of the potion onto the center spiral of the web. Step back. Do not speak.
+    - If the spell takes, the silk will shimmer faintly. The first word may appear within hours, or not at all. The web is no longer just a trap—it’s a page.
+
+    ## Side Effects
+
+    - Mild narrative déjà vu. (You’ll swear you’ve read this moment already.)
+    - Sensation of being observed by something with editorial authority. You are, but maybe you weren’t ready for it to feel this uncomfortable.
+    - The spider may develop opinions about your choices. These may be... legible, and lead to philosophical musings on the nature of free will. 
+
+    ## Warnings
+
+    - Do not use on multiple spiders within the same county. They will form a literary circle. Talk about a tangled plot.
+    - If the glitter was not collected during a moment of emotional intensity, the spider might cast you as the wrong kind of archetype.
+    - Never try to correct a spider’s spelling. It knows exactly what it’s doing.
+
+    Next Example:
+
     # Puddle Jump
 
     ## Effect
@@ -60,7 +98,10 @@ export async function POST(request: NextRequest) {
     4. Carefully add poison ivy leaves whole and unblemished. Let them float. Stir counterclockwise twice with a marble spoon, then once more clockwise. If you’re only familiar with digital watches, well I’m not your kindergarten teacher.
     5. Break the sequin from the beaver queen’s crown into tiny pieces and sprinkle it in. The mixture should fizz slightly and smell faintly of wet bark and freshly pressed drycleaning.
     6. Let the potion settle under moonlight (or the closest equivalent if it’s cloudy) for four hours. Filter through a clean, but not new, cloth. Burn the fabric after.
-    7. To use, dip your dominant foot’s shoe into the potion, then step fully into the water you wish to bypass. Close your eyes and for god’s sake hold your breath. Step out on the opposite shore without any wet socks.
+    
+    ## To Use
+    
+    - Dip your dominant foot’s shoe into the potion, then step fully into the water you wish to bypass. Close your eyes and for god’s sake hold your breath. Step out on the opposite shore without any wet socks.
 
     ## Side Effects
 
@@ -98,7 +139,10 @@ export async function POST(request: NextRequest) {
 3. Add the poison ivy vine, coiled in a spiral like a sleeping snake. It should hum faintly. If it hisses, you’ve waited too long in the season—start over.
 4. Pour in the Ellerbe Creek water while listening to the owl’s hoot on a loop. The water will turn viscous. If it doesn’t, you’ve lied during step two. Remove your finger and reflect.
 5. Let the mixture sit for three hours exactly. Not a moment more. Stir with a bent coat hanger. (No symbolism, just the right kind of rust.)”
-6. To use: When ready, apply the potion topically, using both hands to smooth it over your entire body like lotion. It will burn, then numb, then crackle. Once it sets, step forward and out of yourself. Fold the discarded skin gently and place it in a cool, quiet place. It may whisper. Do not respond.
+
+## To Use
+
+-When ready, apply the potion topically, using both hands to smooth it over your entire body like lotion. It will burn, then numb, then crackle. Once it sets, step forward and out of yourself. Fold the discarded skin gently and place it in a cool, quiet place. It may whisper. Do not respond.
 
 ## Side Effects
 
@@ -131,7 +175,10 @@ Next Example:
 4. Stamen: Say a real secret as you drop the coral honeysuckle stamen in. If it wilts, you lied.
 5. Copperhead Camouflage: Drape the snakeskin over the bowl and let the whole thing steep overnight in a place you don’t usually feel safe. The potion must learn to witness.
 6. In the morning, strain through a piece of fabric you wore during a public failure (gallery opening, open mic, job interview where you said “synergy” twice). Bottle the clearish liquid. It should smell like applause from people who don’t quite get you.
-7. To use, drink it cold, just before beginning any creative act you wouldn’t show your mentor. Within 10 minutes, a nearby object will become... attentive.
+
+## To Use
+
+- Drink it cold, just before beginning any creative act you wouldn’t show your mentor. Within 10 minutes, a nearby object will become... attentive.
 
 ## Side Effects
 
@@ -164,7 +211,11 @@ Next Example:
 3. Smash the rainbow dumplings with the Ponysaurus tap handle until they resemble a sad, festive paste. Smear it in a spiral around the ampersand-shaped snake skin. Crows are suckers for spirals.
 4. Burn the honeysuckle stamen briefly over a candle made from wax salvaged from an overfunded MFA thesis. Drop the ashes into the paste while muttering the phrase: 'Adjust for mood, not medium.
 5. Wait. If more than seven minutes pass, they won’t come.
-6. To use, once the first crow arrives, do not speak. They’ll bring friends. The flock will enter your space through any open window, vent, or psychic aperture and begin to rearrange your art. Trust them. Their taste is sharp, if a little cruel. Do not intervene unless they start pecking at the drywall—that means they hate your lighting.
+
+
+## To Use
+
+- Once the first crow arrives, do not speak. They’ll bring friends. The flock will enter your space through any open window, vent, or psychic aperture and begin to rearrange your art. Trust them. Their taste is sharp, if a little cruel. Do not intervene unless they start pecking at the drywall—that means they hate your lighting.
 
 ## Side Effects
 
@@ -180,7 +231,7 @@ Next Example:
 
 Next Example:
 
-# Potion Name
+# Puddle Jump
 
 ## Effect
 
@@ -200,7 +251,11 @@ Next Example:
 4. Let the ingredients sit until you feel a croak well up inside you, then empty the bowl into the cauldron and enjoy the sizzling sound it makes.
 5. Slice the audio cable open and let its tangled wires electrify the sludge. This is the animation of limbs—digital ghosts and social slipstreams compel frog legs.
 6. Add the ponysaurus sculpture last, crushing it into a fine plastic powder. It binds everything, spreading the potion’s reach as far as it can dissolve. You’ll know the brewing has worked if the surface acquires a bumpy green sheen that shivers slightly.
-7. To Use, put on your top jam. Then, step up to the water and give the frogs their own dance show. This should work up a sweat. When you’re done with your steps, empty the contents into the rippling surface in one quick confident motion. Stand back and see if the frogs feel inspired. If it doesn’t work, blame your taste in music.
+
+
+## To Use
+
+- Put on your top jam. Then, step up to the water and give the frogs their own dance show. This should work up a sweat. When you’re done with your steps, empty the contents into the rippling surface in one quick confident motion. Stand back and see if the frogs feel inspired. If it doesn’t work, blame your taste in music.
 
 ## Side Effects
 
