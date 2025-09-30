@@ -2,6 +2,7 @@ import ReactMarkdown from 'react-markdown';
 import { ReactNode, useEffect, useState } from 'react';
 import ShareRecipeModal from './ShareRecipeModal';
 import AboutModal from './AboutModal';
+import IngredientCarousel from './IngredientCarousel';
 import images, { ImageManifest } from '../lib/image-manifest';
 
 interface PotionRecipeProps {
@@ -53,13 +54,11 @@ export default function PotionRecipe({
             isVisible ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          {/* {
-            ingredientImages?.map(ingredient => (
-              <div key={ingredient.name}>
-                <img src={`/${ingredient.thumbnails.xlarge}`} alt={ingredient.name} />
-              </div>
-            ))
-          } */}
+          {/* Ingredient Carousel */}
+          {ingredientImages && ingredientImages.length > 0 && (
+            <IngredientCarousel ingredients={ingredientImages} />
+          )}
+          
           <div className="prose prose-lg max-w-none">
             <ReactMarkdown
               components={{
