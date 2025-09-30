@@ -52,7 +52,7 @@ export default function AboutModal({ isVisible, onClose }: AboutModalProps) {
           <p className="text-gray-200 text-sm leading-relaxed">
             Created by{' '}
             <a
-              href="https://anniedandgeddes.com"
+              href="https://www.annieandgeddes.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-400 hover:text-blue-300 underline"
@@ -61,7 +61,7 @@ export default function AboutModal({ isVisible, onClose }: AboutModalProps) {
             </a>{' '}
             and{' '}
             <a
-              href="https://anniedandgeddes.com"
+              href="https://www.annieandgeddes.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-400 hover:text-blue-300 underline"
