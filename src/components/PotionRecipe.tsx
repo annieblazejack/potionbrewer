@@ -39,6 +39,8 @@ export default function PotionRecipe({
 
   if (!recipe) return null;
 
+
+  const unstrippedRecipe = recipe;
   const parsedRecipe = parseRecipe(recipe);
   recipe = stripIngredientsCommentFromRecipe(recipe);
 
@@ -151,7 +153,7 @@ export default function PotionRecipe({
         <ShareRecipeModal
           isVisible={showShareModal}
           onClose={() => setShowShareModal(false)}
-          recipe={recipe}
+          recipe={unstrippedRecipe}
           ingredients={ingredients}
         />
 
