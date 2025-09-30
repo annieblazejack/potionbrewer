@@ -2,6 +2,7 @@ import ReactMarkdown from 'react-markdown';
 import { ReactNode, useEffect, useState } from 'react';
 import ShareRecipeModal from './ShareRecipeModal';
 import AboutModal from './AboutModal';
+import images, { ImageManifest } from '../lib/image-manifest';
 
 interface PotionRecipeProps {
   recipe: string;
@@ -9,6 +10,11 @@ interface PotionRecipeProps {
   onBrewAgain?: () => void;
   streaming?: boolean;
 }
+
+const prettyNameToImageManifest = images.reduce((acc, image) => {
+  acc[image.name] = image;
+  return acc;
+}, {} as Record<string, ImageManifest>);
 
 export default function PotionRecipe({
   recipe,
@@ -32,6 +38,13 @@ export default function PotionRecipe({
 
   if (!recipe) return null;
 
+  const parsedRecipe = parseRecipe(recipe);
+  recipe = stripIngredientsCommentFromRecipe(recipe);
+
+  const ingredientImages = parsedRecipe?.ingredients.map(ingredient => prettyNameToImageManifest[ingredient]);
+
+  console.log(ingredientImages);
+
   return (
     <div className="w-full flex justify-center">
       <div className="max-w-4xl w-full">
@@ -40,6 +53,13 @@ export default function PotionRecipe({
             isVisible ? 'opacity-100' : 'opacity-0'
           }`}
         >
+          {/* {
+            ingredientImages?.map(ingredient => (
+              <div key={ingredient.name}>
+                <img src={`/${ingredient.thumbnails.xlarge}`} alt={ingredient.name} />
+              </div>
+            ))
+          } */}
           <div className="prose prose-lg max-w-none">
             <ReactMarkdown
               components={{
@@ -144,4 +164,28 @@ export default function PotionRecipe({
       </div>
     </div>
   );
+}
+
+
+function parseRecipe(recipe: string): { ingredients: string[] } | null {
+  const startIndex = recipe.indexOf('<!--');
+  if (startIndex === -1) {
+    return null;
+  }
+  const endIndex = recipe.indexOf('-->');
+  if (endIndex === -1) {
+    return null;
+  }
+  const json = recipe.substring(startIndex + 4, endIndex);
+  if (!json) {
+    return null;
+  }
+
+  return JSON.parse(json);
+}
+
+function stripIngredientsCommentFromRecipe(recipe: string): string {
+  const startIndex = recipe.indexOf('<!--');
+  const endIndex = recipe.indexOf('-->');
+  return recipe.substring(0, startIndex) + recipe.substring(endIndex + 3);
 }

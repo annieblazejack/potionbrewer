@@ -306,6 +306,13 @@ Important!: Return the response in markdown format as shown above. Do not wrap i
     const readable = new ReadableStream({
       async start(controller) {
         try {
+          controller.enqueue(encoder.encode(`<!--
+            {
+              "ingredients": ${JSON.stringify(ingredients)}
+            }
+            -->
+`));
+
           for await (const chunk of stream) {
             const content = chunk.choices[0]?.delta?.content;
             if (content) {

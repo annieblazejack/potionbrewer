@@ -12,8 +12,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Potion Brewer',
-  description: 'A minimal approach to digital alchemy',
+  title: 'Carolina Potions',
+  description: 'A North Carolina-themed digital cauldron by Annie Blazejack and Geddes Levenson',
 };        
 
 export default function RootLayout({

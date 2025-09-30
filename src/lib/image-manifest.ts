@@ -1,5 +1,5 @@
 // Auto-generated image manifest
-// Generated on: 2025-09-29T23:43:27.947Z
+// Generated on: 2025-09-29T23:46:41.381Z
 
 export interface ImageManifest {
   url: string;
@@ -374,13 +374,13 @@ export const images: ImageManifest[] = [
     }
   },
   {
-    url: "ingredients/glitterFromTheFruit.png",
-    name: "Glitter From The Fruit",
+    url: "ingredients/glitterFromTheFloorOfTheFruit.png",
+    name: "Glitter From The Floor Of The Fruit",
     thumbnails: {
-      small: "ingredients/glitterFromTheFruit-thumb.png",
-      medium: "ingredients/glitterFromTheFruit-medium.png",
-      large: "ingredients/glitterFromTheFruit-large.png",
-      xlarge: "ingredients/glitterFromTheFruit-xlarge.png"
+      small: "ingredients/glitterFromTheFloorOfTheFruit-thumb.png",
+      medium: "ingredients/glitterFromTheFloorOfTheFruit-medium.png",
+      large: "ingredients/glitterFromTheFloorOfTheFruit-large.png",
+      xlarge: "ingredients/glitterFromTheFloorOfTheFruit-xlarge.png"
     }
   },
   {
